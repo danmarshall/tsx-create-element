@@ -53,9 +53,7 @@ export function createElement(tag: any, attrs: any, ...children: any[]) {
 
 function flatten(o: object) {
     const arr: string[] = [];
-    for (let prop in o) {
-        arr.push(`${decamelize(prop, '-')}:${o[prop]}`);
-    }
+    for (let prop in o) arr.push(`${decamelize(prop, '-')}:${o[prop]}`);
     return arr.join(';');
 }
 
@@ -80,25 +78,18 @@ function isElement(el: Element | JSX.Element | any) {
     return !!(el as Element).nodeType;
 }
 
-export function mount(parentElement: HTMLElement, jsxElement: JSX.Element) {
-    const activeChildPositions = getActiveChildPositions(parentElement);
-    parentElement.innerHTML = '';
+export function mount(jsxElement: JSX.Element, container: HTMLElement) {
+    const activeChildPositions = getActiveChildPositions(container);
+    container.innerHTML = '';
     if (jsxElement) {
-        addChild(parentElement, jsxElement);
-        if (activeChildPositions) {
-            const activeChild = getChildAtPosition(parentElement, activeChildPositions) as HTMLElement;
-            if (activeChild) {
-                activeChild.focus();
-            }
-        }
+        addChild(container, jsxElement);
+        if (activeChildPositions) focusChildAtPosition(container, activeChildPositions);
     }
 }
 
-function getChildAtPosition(element: Element, childPositions: number[]) {
-    while (element && childPositions.length) {
-        element = element.children.item(childPositions.shift());
-    }
-    return element;
+function focusChildAtPosition(element: Element, childPositions: number[]) {
+    while (element && childPositions.length) element = element.children.item(childPositions.shift());
+    if (element) (element as HTMLElement).focus();
 }
 
 function getActiveChildPositions(containerElement: HTMLElement) {
@@ -108,9 +99,7 @@ function getActiveChildPositions(containerElement: HTMLElement) {
         childPositions.unshift(childPosition(active));
         active = active.parentElement;
     }
-    if (active === containerElement && childPositions.length) {
-        return childPositions;
-    }
+    if (active === containerElement && childPositions.length) return childPositions;
 }
 
 function childPosition(element: Element) {
