@@ -1,0 +1,30 @@
+{
+  "name": "tsx-create-element",
+  "version": "1.0.0",
+  "description": "Use TypeScript TSX without React",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -p .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danmarshall/tsx-create-element.git"
+  },
+  "keywords": [
+    "tsx"
+  ],
+  "author": "Dan Marshall",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danmarshall/tsx-create-element/issues"
+  },
+  "homepage": "https://github.com/danmarshall/tsx-create-element#readme",
+  "dependencies": {
+    "@types/react": "^16.4.2",
+    "decamelize": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/decamelize": "^1.2.0"
+  }
+}
