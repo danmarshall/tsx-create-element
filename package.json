@@ -25,6 +25,7 @@
     "decamelize": "^2.0.0"
   },
   "devDependencies": {
-    "@types/decamelize": "^1.2.0"
+    "@types/decamelize": "^1.2.0",
+    "typescript": "^2.7.2"
   }
 }
