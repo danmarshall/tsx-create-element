@@ -1,6 +1,6 @@
 {
   "name": "tsx-create-element",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Use TypeScript TSX without React",
   "main": "dist/es6/index.js",
   "types": "dist/es6/index.d.ts",
