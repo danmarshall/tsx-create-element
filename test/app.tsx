@@ -3,14 +3,24 @@ import { SubComponent } from './subcomponent';
 
 export interface Props {
     title: string;
+    count: number;
+    buttonClick: () => void;
 }
 
-export const render = (props: Props) => {
+export const App = (props: Props) => {
     return (
         <div>
-            <h2>{props.title}</h2>
-            <SubComponent text="a component" count={1} />
-            <SubComponent text="another component" count={2} />
+            <h1 className="foo">{props.title}</h1>
+            <div>count is: {props.count}</div>
+            <button onClick={() => props.buttonClick()}>add</button>
+            <button onClick={() => props.buttonClick()} disabled={true} style={{marginLeft: "1em"}}>this is disabled</button>
+            <SubComponent someText="a component">
+                component 1 content
+            </SubComponent>
+            <SubComponent someText="another component" >
+                component 2 content
+                <span>...and more content</span>
+            </SubComponent>
         </div>
     );
 }

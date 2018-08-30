@@ -3,7 +3,7 @@ import * as _decamelize from 'decamelize';
 //handle es6 / bundling
 const decamelize = (_decamelize['default'] || _decamelize) as typeof _decamelize;
 
-export type StatelessProps<T> = T & { children?: JSX.Element | JSX.Element[] };
+export type StatelessProps<T> = T & { children?: (JSX.Element | Content) | (JSX.Element | Content)[] };
 
 export interface StatelessComponent<T> {
     (props: StatelessProps<T>): JSX.Element;
