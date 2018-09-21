@@ -24,12 +24,15 @@
     "url": "https://github.com/danmarshall/tsx-create-element/issues"
   },
   "homepage": "https://github.com/danmarshall/tsx-create-element#readme",
+  "peerDependencies": {
+    "@types/react": "*"
+  },
   "dependencies": {
-    "@types/react": "^16.4.2",
     "decamelize": "^2.0.0"
   },
   "devDependencies": {
     "@types/decamelize": "^1.2.0",
+    "@types/react": "^16.4.2",
     "typescript": "^2.7.2"
   }
 }
