@@ -58,7 +58,7 @@ function flatten(o: object) {
 }
 
 function addChild(parentElement: HTMLElement, child: Element | Content | JSX.Element | (Element | Content)[]) {
-    if (child === null || child === undefined) {
+    if (child === null || child === undefined || typeof child === "boolean") {
         return;
     } else if (Array.isArray(child)) {
         appendChildren(parentElement, child);
