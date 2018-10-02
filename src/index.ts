@@ -78,11 +78,11 @@ function isElement(el: Element | JSX.Element | any) {
     return !!(el as Element).nodeType;
 }
 
-export function mount(jsxElement: JSX.Element, container: HTMLElement) {
+export function mount(element: Element | JSX.Element, container: HTMLElement) {
     const activeChildPositions = getActiveChildPositions(container);
     container.innerHTML = '';
-    if (jsxElement) {
-        addChild(container, jsxElement);
+    if (element) {
+        addChild(container, element);
         if (activeChildPositions) focusChildAtPosition(container, activeChildPositions);
     }
 }
