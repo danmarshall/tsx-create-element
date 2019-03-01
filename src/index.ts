@@ -1,4 +1,6 @@
 import * as _decamelize from 'decamelize';
+import * as htmlTags from 'html-tags';
+import * as svgTags from 'svg-tags';
 
 //handle es6 / bundling
 const decamelize = (_decamelize['default'] || _decamelize) as typeof _decamelize;
@@ -24,23 +26,24 @@ export function createElement(tag: any, attrs: any, ...children: any[]) {
         props.children = children;
         return fn(props);
     } else {
-        const el: HTMLElement = document.createElement(tag as string);
+        const ns = tagNamespace(tag);
+        const el: Element = ns ? document.createElementNS(ns, tag) : document.createElement(tag as string);
         const map = attrs as AttributeMap;
         for (let name in map) {
             if (name && map.hasOwnProperty(name)) {
                 let value = map[name];
                 if (name === 'className' && value !== void 0) {
-                    el.setAttribute('class', value.toString());
+                    setAttribute(el, ns, 'class', value.toString());
                 } else if (value === false || value === null || value === undefined) {
                     continue;
                 } else if (value === true) {
-                    el.setAttribute(name, name);
+                    setAttribute(el, ns, name, name);
                 } else if (typeof value === 'function') {
                     el[name.toLowerCase()] = value;
                 } else if (typeof value === 'object') {
-                    el.setAttribute(name, flatten(value));
+                    setAttribute(el, ns, name, flatten(value));
                 } else {
-                    el.setAttribute(name, value.toString());
+                    setAttribute(el, ns, name, value.toString());
                 }
             }
         }
@@ -51,13 +54,21 @@ export function createElement(tag: any, attrs: any, ...children: any[]) {
     }
 }
 
+function setAttribute(el: Element, ns: string, name: string, value: string) {
+    if (ns) {
+        el.setAttributeNS(null, name, value);
+    } else {
+        el.setAttribute(name, value);
+    }
+}
+
 function flatten(o: object) {
     const arr: string[] = [];
     for (let prop in o) arr.push(`${decamelize(prop, '-')}:${o[prop]}`);
     return arr.join(';');
 }
 
-function addChild(parentElement: HTMLElement, child: Element | Content | JSX.Element | (Element | Content)[]) {
+function addChild(parentElement: Element, child: Element | Content | JSX.Element | (Element | Content)[]) {
     if (child === null || child === undefined || typeof child === "boolean") {
         return;
     } else if (Array.isArray(child)) {
@@ -69,7 +80,7 @@ function addChild(parentElement: HTMLElement, child: Element | Content | JSX.Ele
     }
 }
 
-function appendChildren(parentElement: HTMLElement, children: (Element | Content)[]) {
+function appendChildren(parentElement: Element, children: (Element | Content)[]) {
     children.forEach(child => addChild(parentElement, child));
 }
 
@@ -106,4 +117,11 @@ function childPosition(element: Element) {
     let i = 0;
     while (element = element.previousElementSibling) i++;
     return i;
+}
+
+function tagNamespace(tag: string) {
+    //issue: this won't disambiguate certain tags which exist in both svg and html: <a>, <title> ...
+    if (tag === 'svg' || (svgTags.default.indexOf(tag) >= 0 && !(htmlTags.default.indexOf(tag) >= 0))) {
+        return "http://www.w3.org/2000/svg";
+    }
 }

@@ -13,7 +13,7 @@ export const App = (props: Props) => {
             <h1 className="foo">{props.title}</h1>
             <div>count is: {props.count}</div>
             <button onClick={() => props.buttonClick()}>add</button>
-            <button onClick={() => props.buttonClick()} disabled={true} style={{marginLeft: "1em"}}>this is disabled</button>
+            <button onClick={() => props.buttonClick()} disabled={true} style={{ marginLeft: "1em" }}>this is disabled</button>
             <SubComponent someText="a component">
                 component 1 content
             </SubComponent>
@@ -21,6 +21,11 @@ export const App = (props: Props) => {
                 component 2 content
                 <span>...and more content</span>
             </SubComponent>
+            <svg width="100%" height="100%">
+                <rect width="100%" height="100%" style={{ fill: 'none', strokeWidth: 1, stroke: 'red' }} />
+                <line x1="0" y1="0" x2="100%" y2="100%" style={{ strokeWidth: 1, stroke: 'red' }} />
+                <line x1="0" y1="100%" x2="100%" y2="0" style={{ strokeWidth: 1, stroke: 'red' }} />
+            </svg>
         </div>
     );
 }
