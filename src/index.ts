@@ -44,7 +44,7 @@ export function createElement(tag: any, attrs: any, ...children: any[]) {
                 let value = map[name];
                 if (name === 'className' && value !== void 0) {
                     setAttribute(el, ns, 'class', value.toString());
-                } else if (value === false || value === null || value === undefined) {
+                } else if (value === null || value === undefined) {
                     continue;
                 } else if (value === true) {
                     setAttribute(el, ns, name, name);
