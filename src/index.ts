@@ -17,6 +17,15 @@ export interface AttributeMap {
     [key: string]: Content | Function;
 }
 
+type SelectionDirection = "forward" | "backward" | "none";
+
+interface ChildPosition {
+    childIndex: number;
+    selectionStart: number;
+    selectionEnd: number;
+    selectionDirection: SelectionDirection;
+}
+
 export function createElement<T>(tag: StatelessComponent<T>, attrs: StatelessProps<T>, ...children: JSX.Element[]);
 export function createElement(tag: string, attrs: AttributeMap, ...children: (Element | Content)[]);
 export function createElement(tag: any, attrs: any, ...children: any[]) {
@@ -29,6 +38,7 @@ export function createElement(tag: any, attrs: any, ...children: any[]) {
         const ns = tagNamespace(tag);
         const el: Element = ns ? document.createElementNS(ns, tag) : document.createElement(tag as string);
         const map = attrs as AttributeMap;
+        let ref: (el: HTMLElement) => void;
         for (let name in map) {
             if (name && map.hasOwnProperty(name)) {
                 let value = map[name];
@@ -39,7 +49,11 @@ export function createElement(tag: any, attrs: any, ...children: any[]) {
                 } else if (value === true) {
                     setAttribute(el, ns, name, name);
                 } else if (typeof value === 'function') {
-                    el[name.toLowerCase()] = value;
+                    if (name === 'ref') {
+                        ref = value as (el: HTMLElement) => void;
+                    } else {
+                        el[name.toLowerCase()] = value;
+                    }
                 } else if (typeof value === 'object') {
                     setAttribute(el, ns, name, flatten(value));
                 } else {
@@ -49,6 +63,9 @@ export function createElement(tag: any, attrs: any, ...children: any[]) {
         }
         if (children && children.length > 0) {
             appendChildren(el, children);
+        }
+        if (ref) {
+            ref(el as HTMLElement);
         }
         return el;
     }
@@ -98,14 +115,23 @@ export function mount(element: Element | JSX.Element, container: HTMLElement) {
     }
 }
 
-function focusChildAtPosition(element: Element, childPositions: number[]) {
-    while (element && childPositions.length) element = element.children.item(childPositions.shift());
-    if (element) (element as HTMLElement).focus();
+function focusChildAtPosition(element: Element, childPositions: ChildPosition[]) {
+    let childPosition: ChildPosition;
+    while (element && childPositions.length) {
+        childPosition = childPositions.shift()
+        element = element.children.item(childPosition.childIndex);
+    }
+    if (element) {
+        (element as HTMLElement).focus();
+        if (childPosition.selectionStart != null && childPosition.selectionEnd != null) {
+            (element as HTMLInputElement).setSelectionRange(childPosition.selectionStart, childPosition.selectionEnd, childPosition.selectionDirection);
+        }
+    };
 }
 
 function getActiveChildPositions(containerElement: HTMLElement) {
     var active = document.activeElement;
-    var childPositions: number[] = [];
+    var childPositions: ChildPosition[] = [];
     while (active !== document.body && active !== containerElement) {
         childPositions.unshift(childPosition(active));
         active = active.parentElement;
@@ -113,10 +139,14 @@ function getActiveChildPositions(containerElement: HTMLElement) {
     if (active === containerElement && childPositions.length) return childPositions;
 }
 
-function childPosition(element: Element) {
-    let i = 0;
-    while (element = element.previousElementSibling) i++;
-    return i;
+function childPosition(element: Element): ChildPosition {
+    let selectionStart: number = null, selectionEnd: number = null, selectionDirection: SelectionDirection = null;
+    selectionStart = (element as HTMLInputElement).selectionStart;
+    selectionEnd = (element as HTMLInputElement).selectionEnd;
+    selectionDirection = (element as HTMLInputElement).selectionDirection as SelectionDirection;
+    let childIndex = 0;
+    while (element = element.previousElementSibling) childIndex++;
+    return { childIndex, selectionStart, selectionEnd, selectionDirection };
 }
 
 function tagNamespace(tag: string) {
