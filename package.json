@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "build": "tsc -p .",
+    "watch": "tsc -p . -w",
     "test": "tsc -p test"
   },
   "repository": {
