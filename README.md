@@ -48,16 +48,10 @@ See the [test folder](https://github.com/danmarshall/tsx-create-element/tree/mas
 1. You may also lose focus when `mount` is called. There is a [simplistic heuristic](https://github.com/danmarshall/tsx-create-element/blob/master/src/index.ts#L119) which tries to map the position of the [activeElement](https://developer.mozilla.org/en-US/docs/Web/API/DocumentOrShadowRoot/activeElement).
 
 ## Test
-To see the test page, install [parcel](https://www.npmjs.com/package/parcel) globally:
+To see the test page, run:
 
 ```
-npm i -g parcel
-```
-
-Then run this command:
-
-```
-parcel serve ./test/index.html
+npm start
 ```
 
 ## Similar work
