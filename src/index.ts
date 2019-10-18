@@ -2,15 +2,13 @@ import * as htmlTags from 'html-tags';
 import * as svgTags from 'svg-tags';
 
 /**
- * Decamelizes a string with/without a custom separator (underscore by default).
+ * Decamelizes a string with/without a custom separator (hyphen by default).
  * from: https://ourcodeworld.com/articles/read/608/how-to-camelize-and-decamelize-strings-in-javascript
  * 
  * @param str String in camelcase
  * @param separator Separator for the new decamelized string.
  */
-function decamelize(str, separator) {
-    separator = typeof separator === 'undefined' ? '_' : separator;
-
+function decamelize(str: string, separator: string = '-') {
     return str
         .replace(/([a-z\d])([A-Z])/g, '$1' + separator + '$2')
         .replace(/([A-Z]+)([A-Z][a-z\d]+)/g, '$1' + separator + '$2')
