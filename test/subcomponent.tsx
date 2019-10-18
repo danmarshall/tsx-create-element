@@ -9,8 +9,10 @@ export const SubComponent: StatelessComponent<Props> = (props: StatelessProps<Pr
     return (
         <div style={{ border: "1px solid black", margin: "0.5em 0", padding: "0.5em" }}>
             <div>Text is: {props.someText}</div>
-            <div>Children: {props.children}</div>
-            <textarea ref={t => props.onTextareaRef(t)}>{props.someText}</textarea>
+            <div>Children:
+                <div>{props.children}</div>
+            </div>
+            <textarea ref={t => props.onTextareaRef(t)} spellCheck={false}>{props.someText}</textarea>
         </div>
     );
 }
