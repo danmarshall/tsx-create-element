@@ -14,7 +14,7 @@ export const App = (props: Props) => {
     return (
         <div>
             <h1 className="foo">{props.title}</h1>
-            <input ref={input => props.onTitleInputRef(input)} type="text" value={props.title} />
+            <input ref={input => props.onTitleInputRef(input)} type="text" value={props.title} spellCheck={false} />
             <div>count is: {props.count}</div>
             <button onClick={() => props.buttonClick()}>add</button>
             <button onClick={() => props.buttonClick()} style={{ marginLeft: "1em" }}>I also add</button>

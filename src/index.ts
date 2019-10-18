@@ -44,7 +44,7 @@ export function createElement(tag: any, attrs: any, ...children: any[]) {
                 let value = map[name];
                 if (name === 'className' && value !== void 0) {
                     setAttribute(el, ns, 'class', value.toString());
-                } else if (value === false || value === null || value === undefined) {
+                } else if (value === null || value === undefined) {
                     continue;
                 } else if (value === true) {
                     setAttribute(el, ns, name, name);
@@ -123,16 +123,16 @@ function focusChildAtPosition(element: Element, childPositions: ChildPosition[])
     }
     if (element) {
         (element as HTMLElement).focus();
-        if (childPosition.selectionStart != null && childPosition.selectionEnd != null) {
+        if (childPosition && childPosition.selectionStart != null && childPosition.selectionEnd != null) {
             (element as HTMLInputElement).setSelectionRange(childPosition.selectionStart, childPosition.selectionEnd, childPosition.selectionDirection);
         }
     };
 }
 
 function getActiveChildPositions(containerElement: HTMLElement) {
-    var active = document.activeElement;
-    var childPositions: ChildPosition[] = [];
-    while (active !== document.body && active !== containerElement) {
+    let active = document.activeElement;
+    const childPositions: ChildPosition[] = [];
+    while (active && active !== document.body && active !== containerElement) {
         childPositions.unshift(childPosition(active));
         active = active.parentElement;
     }
