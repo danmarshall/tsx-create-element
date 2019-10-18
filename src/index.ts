@@ -1,9 +1,21 @@
-import * as _decamelize from 'decamelize';
 import * as htmlTags from 'html-tags';
 import * as svgTags from 'svg-tags';
 
-//handle es6 / bundling
-const decamelize = (_decamelize['default'] || _decamelize) as typeof _decamelize;
+/**
+ * Decamelizes a string with/without a custom separator (underscore by default).
+ * from: https://ourcodeworld.com/articles/read/608/how-to-camelize-and-decamelize-strings-in-javascript
+ * 
+ * @param str String in camelcase
+ * @param separator Separator for the new decamelized string.
+ */
+function decamelize(str, separator) {
+    separator = typeof separator === 'undefined' ? '_' : separator;
+
+    return str
+        .replace(/([a-z\d])([A-Z])/g, '$1' + separator + '$2')
+        .replace(/([A-Z]+)([A-Z][a-z\d]+)/g, '$1' + separator + '$2')
+        .toLowerCase();
+}
 
 export type StatelessProps<T> = T & { children?: (JSX.Element | Content) | (JSX.Element | Content)[] };
 
@@ -122,7 +134,7 @@ function focusChildAtPosition(element: Element, childPositions: ChildPosition[])
         childPosition = childPositions.shift()
         element = element.children.item(childPosition.childIndex);
     }
-    if (element) {        
+    if (element) {
         const el = element as HTMLInputElement; //cast to input or textarea
         el.focus();
         if (childPosition && childPosition.selectionStart != null && childPosition.selectionEnd != null) {
