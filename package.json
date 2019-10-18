@@ -10,7 +10,9 @@
   "scripts": {
     "build": "tsc -p .",
     "watch": "tsc -p . -w",
-    "test": "tsc -p test"
+    "test": "tsc -p test",
+    "uitest": "parcel serve ./test/index.html --open",
+    "start": "npm-run-all --parallel watch uitest"
   },
   "repository": {
     "type": "git",
@@ -36,6 +38,8 @@
   "devDependencies": {
     "@types/decamelize": "^1.2.0",
     "@types/react": "^16.4.2",
+    "npm-run-all": "^4.1.5",
+    "parcel": "^1.12.4",
     "typescript": "^2.7.2"
   }
 }
