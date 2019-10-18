@@ -25,11 +25,13 @@ export const App = (props: Props) => {
                 </SubComponent>
             ))}
             namespaced element (svg):
-            <svg width="100%" height="100%">
-                <rect width="100%" height="100%" style={{ fill: 'none', strokeWidth: 1, stroke: 'red' }} />
-                <line x1="0" y1="0" x2="100%" y2="100%" style={{ strokeWidth: 1, stroke: 'red' }} />
-                <line x1="0" y1="100%" x2="100%" y2="0" style={{ strokeWidth: 1, stroke: 'red' }} />
-            </svg>
+            <div>
+                <svg width="100" height="100">
+                    <rect width="100%" height="100%" style={{ fill: 'none', strokeWidth: 1, stroke: 'red' }} />
+                    <line x1="0" y1="0" x2="100%" y2="100%" style={{ strokeWidth: 1, stroke: 'red' }} />
+                    <line x1="0" y1="100%" x2="100%" y2="0" style={{ strokeWidth: 1, stroke: 'red' }} />
+                </svg>
+            </div>
         </div>
     );
 }

@@ -45,7 +45,7 @@ See the [test folder](https://github.com/danmarshall/tsx-create-element/tree/mas
 ## Caveats
 1. This will only render stateless components. No React = no React lifecycle.
 1. Everytime `mount` is called, the DOM subtree is obliterated. You may lose state in stateful elements such as textboxes. You will need to manage this yourself, prior to calling `mount`.
-1. You may also lose focus when `mount` is called. There is a [simplistic heuristic](https://github.com/danmarshall/tsx-create-element/blob/master/src/index.ts#L104) which tries to map the position of the [activeElement](https://developer.mozilla.org/en-US/docs/Web/API/DocumentOrShadowRoot/activeElement).
+1. You may also lose focus when `mount` is called. There is a [simplistic heuristic](https://github.com/danmarshall/tsx-create-element/blob/master/src/index.ts#L119) which tries to map the position of the [activeElement](https://developer.mozilla.org/en-US/docs/Web/API/DocumentOrShadowRoot/activeElement).
 
 ## Test
 To see the test page, install [parcel](https://www.npmjs.com/package/parcel) globally:

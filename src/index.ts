@@ -1,9 +1,19 @@
-import * as _decamelize from 'decamelize';
 import * as htmlTags from 'html-tags';
 import * as svgTags from 'svg-tags';
 
-//handle es6 / bundling
-const decamelize = (_decamelize['default'] || _decamelize) as typeof _decamelize;
+/**
+ * Decamelizes a string with/without a custom separator (hyphen by default).
+ * from: https://ourcodeworld.com/articles/read/608/how-to-camelize-and-decamelize-strings-in-javascript
+ * 
+ * @param str String in camelcase
+ * @param separator Separator for the new decamelized string.
+ */
+function decamelize(str: string, separator: string = '-') {
+    return str
+        .replace(/([a-z\d])([A-Z])/g, '$1' + separator + '$2')
+        .replace(/([A-Z]+)([A-Z][a-z\d]+)/g, '$1' + separator + '$2')
+        .toLowerCase();
+}
 
 export type StatelessProps<T> = T & { children?: (JSX.Element | Content) | (JSX.Element | Content)[] };
 
@@ -21,9 +31,10 @@ type SelectionDirection = "forward" | "backward" | "none";
 
 interface ChildPosition {
     childIndex: number;
+    scrollTop: number;
     selectionStart: number;
     selectionEnd: number;
-    selectionDirection: SelectionDirection;
+    selectionDirection: string;
 }
 
 export function createElement<T>(tag: StatelessComponent<T>, attrs: StatelessProps<T>, ...children: JSX.Element[]);
@@ -122,9 +133,11 @@ function focusChildAtPosition(element: Element, childPositions: ChildPosition[])
         element = element.children.item(childPosition.childIndex);
     }
     if (element) {
-        (element as HTMLElement).focus();
+        const el = element as HTMLInputElement; //cast to input or textarea
+        el.focus();
         if (childPosition && childPosition.selectionStart != null && childPosition.selectionEnd != null) {
-            (element as HTMLInputElement).setSelectionRange(childPosition.selectionStart, childPosition.selectionEnd, childPosition.selectionDirection);
+            el.setSelectionRange(childPosition.selectionStart, childPosition.selectionEnd, childPosition.selectionDirection as SelectionDirection);
+            el.scrollTop = childPosition.scrollTop;
         }
     };
 }
@@ -140,13 +153,11 @@ function getActiveChildPositions(containerElement: HTMLElement) {
 }
 
 function childPosition(element: Element): ChildPosition {
-    let selectionStart: number = null, selectionEnd: number = null, selectionDirection: SelectionDirection = null;
-    selectionStart = (element as HTMLInputElement).selectionStart;
-    selectionEnd = (element as HTMLInputElement).selectionEnd;
-    selectionDirection = (element as HTMLInputElement).selectionDirection as SelectionDirection;
+    const el = element as HTMLInputElement;
+    const { scrollTop, selectionDirection, selectionEnd, selectionStart } = el;
     let childIndex = 0;
     while (element = element.previousElementSibling) childIndex++;
-    return { childIndex, selectionStart, selectionEnd, selectionDirection };
+    return { childIndex, selectionStart, selectionEnd, selectionDirection, scrollTop };
 }
 
 function tagNamespace(tag: string) {
