@@ -21,9 +21,10 @@ type SelectionDirection = "forward" | "backward" | "none";
 
 interface ChildPosition {
     childIndex: number;
+    scrollTop: number;
     selectionStart: number;
     selectionEnd: number;
-    selectionDirection: SelectionDirection;
+    selectionDirection: string;
 }
 
 export function createElement<T>(tag: StatelessComponent<T>, attrs: StatelessProps<T>, ...children: JSX.Element[]);
@@ -121,10 +122,12 @@ function focusChildAtPosition(element: Element, childPositions: ChildPosition[])
         childPosition = childPositions.shift()
         element = element.children.item(childPosition.childIndex);
     }
-    if (element) {
-        (element as HTMLElement).focus();
+    if (element) {        
+        const el = element as HTMLInputElement; //cast to input or textarea
+        el.focus();
         if (childPosition && childPosition.selectionStart != null && childPosition.selectionEnd != null) {
-            (element as HTMLInputElement).setSelectionRange(childPosition.selectionStart, childPosition.selectionEnd, childPosition.selectionDirection);
+            el.setSelectionRange(childPosition.selectionStart, childPosition.selectionEnd, childPosition.selectionDirection as SelectionDirection);
+            el.scrollTop = childPosition.scrollTop;
         }
     };
 }
@@ -140,13 +143,11 @@ function getActiveChildPositions(containerElement: HTMLElement) {
 }
 
 function childPosition(element: Element): ChildPosition {
-    let selectionStart: number = null, selectionEnd: number = null, selectionDirection: SelectionDirection = null;
-    selectionStart = (element as HTMLInputElement).selectionStart;
-    selectionEnd = (element as HTMLInputElement).selectionEnd;
-    selectionDirection = (element as HTMLInputElement).selectionDirection as SelectionDirection;
+    const el = element as HTMLInputElement;
+    const { scrollTop, selectionDirection, selectionEnd, selectionStart } = el;
     let childIndex = 0;
     while (element = element.previousElementSibling) childIndex++;
-    return { childIndex, selectionStart, selectionEnd, selectionDirection };
+    return { childIndex, selectionStart, selectionEnd, selectionDirection, scrollTop };
 }
 
 function tagNamespace(tag: string) {
