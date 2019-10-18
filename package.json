@@ -11,8 +11,9 @@
     "build": "tsc -p .",
     "watch": "tsc -p . -w",
     "test": "tsc -p test",
+    "test-watch": "tsc -p test -w",
     "uitest": "parcel serve ./test/index.html --open",
-    "start": "npm-run-all --parallel watch uitest"
+    "start": "npm-run-all --parallel watch test-watch uitest"
   },
   "repository": {
     "type": "git",

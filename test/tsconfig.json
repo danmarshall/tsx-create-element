@@ -2,6 +2,6 @@
     "compilerOptions": {
         "jsx": "react",
         "jsxFactory": "createElement",
-        "outDir": "dist"
+        "outDir": "../tmp"
     }
 }
