@@ -10,16 +10,23 @@ const buttonClick = () => {
 };
 
 const onTitleInputRef = (input: HTMLInputElement) => {
-    input.onkeyup = input.onkeydown = input.onchange = () => {
-        title = input.value;
-        update();
+    input.onkeypress = input.onkeydown = input.onkeyup = input.onchange = () => {
+        //do not invoke mount() directly within this handler,
+        //otherwise the element will be orphaned
+        //so wrap it within requestAnimationFrame 
+        requestAnimationFrame(() => {
+            title = input.value;
+            update();
+        });
     }
 };
 
 const onSubComponentTextareaRef = (textarea: HTMLTextAreaElement, i: number) => {
-    textarea.onkeyup = textarea.onkeydown = textarea.onchange = () => {
-        subComponentText[i] = textarea.value;
-        update();
+    textarea.onkeypress = textarea.onkeydown = textarea.onkeyup = textarea.onchange = () => {
+        requestAnimationFrame(() => {
+            subComponentText[i] = textarea.value;
+            update();
+        });
     }
 };
 
