@@ -123,7 +123,7 @@ export function mount(element: Element | JSX.Element, container: HTMLElement) {
     if (element) {
         addChild(container, element);
         if (activeElementInfo) {
-            const input = findActiveElementByChildPosition(container, activeElementInfo);
+            const input = findElementByChildPositions(container, activeElementInfo.childPositions);
             if (input) {
                 focusActiveElement(input, activeElementInfo);
             }
@@ -131,11 +131,11 @@ export function mount(element: Element | JSX.Element, container: HTMLElement) {
     }
 }
 
-function findActiveElementByChildPosition(container: Element, activeElementInfo: ActiveElementInfo) {
+export function findElementByChildPositions(container: Element, childPositions: number[]) {
     let element = container;
     let childPosition: number;
-    while (element && activeElementInfo.childPositions.length) {
-        childPosition = activeElementInfo.childPositions.shift()
+    while (element && childPositions.length) {
+        childPosition = childPositions.shift()
         element = element.children.item(childPosition);
     }
     if (element) {
@@ -143,7 +143,7 @@ function findActiveElementByChildPosition(container: Element, activeElementInfo:
     };
 }
 
-export function focusActiveElement(input: HTMLInputElement, activeElementInfo: ActiveElementInfo) {
+export function focusActiveElement(input: HTMLInputElement | HTMLTextAreaElement, activeElementInfo: ActiveElementInfo) {
     input.focus();
     if (activeElementInfo && activeElementInfo.selectionStart != null && activeElementInfo.selectionEnd != null) {
         input.setSelectionRange(activeElementInfo.selectionStart, activeElementInfo.selectionEnd, activeElementInfo.selectionDirection as SelectionDirection);
