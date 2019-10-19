@@ -29,7 +29,7 @@ export interface AttributeMap {
 
 type SelectionDirection = "forward" | "backward" | "none";
 
-export interface ActiveElement {
+export interface ActiveElementInfo {
     childPositions: number[];
     scrollTop?: number;
     selectionStart?: number;
@@ -118,45 +118,54 @@ function isElement(el: Element | JSX.Element | any) {
 }
 
 export function mount(element: Element | JSX.Element, container: HTMLElement) {
-    const activeChildPosition = getActiveChildPosition(container);
+    const activeChildPosition = getActiveElementInfo(container);
     container.innerHTML = '';
     if (element) {
         addChild(container, element);
-        if (activeChildPosition) focusChildAtPosition(container, activeChildPosition);
+        if (activeChildPosition) {
+            const input = findChildAtPosition(container, activeChildPosition);
+            if (input) {
+                focusChildAtPosition(input, activeChildPosition);
+            }
+        }
     }
 }
 
-export function focusChildAtPosition(element: Element, activeElement: ActiveElement) {
+function findChildAtPosition(container: Element, activeElementInfo: ActiveElementInfo) {
+    let element = container;
     let childPosition: number;
-    while (element && activeElement.childPositions.length) {
-        childPosition = activeElement.childPositions.shift()
+    while (element && activeElementInfo.childPositions.length) {
+        childPosition = activeElementInfo.childPositions.shift()
         element = element.children.item(childPosition);
     }
     if (element) {
-        const el = element as HTMLInputElement; //cast to input or textarea
-        el.focus();
-        if (activeElement && activeElement.selectionStart != null && activeElement.selectionEnd != null) {
-            el.setSelectionRange(activeElement.selectionStart, activeElement.selectionEnd, activeElement.selectionDirection as SelectionDirection);
-            el.scrollTop = activeElement.scrollTop;
-        }
+        return element as HTMLInputElement; //cast to input or textarea;
     };
 }
 
-export function getActiveChildPosition(containerElement: HTMLElement) {
+export function focusChildAtPosition(input: HTMLInputElement, activeElementInfo: ActiveElementInfo) {
+    input.focus();
+    if (activeElementInfo && activeElementInfo.selectionStart != null && activeElementInfo.selectionEnd != null) {
+        input.setSelectionRange(activeElementInfo.selectionStart, activeElementInfo.selectionEnd, activeElementInfo.selectionDirection as SelectionDirection);
+        input.scrollTop = activeElementInfo.scrollTop;
+    }
+}
+
+export function getActiveElementInfo(container: HTMLElement) {
     let element = document.activeElement;
     const { scrollTop, selectionDirection, selectionEnd, selectionStart } = element as HTMLInputElement;
-    const activeElement: ActiveElement = {
+    const activeElementInfo: ActiveElementInfo = {
         childPositions: [],
         scrollTop,
         selectionDirection,
         selectionEnd,
         selectionStart
     };
-    while (element && element !== document.body && element !== containerElement) {
-        activeElement.childPositions.unshift(getChildPosition(element));
+    while (element && element !== document.body && element !== container) {
+        activeElementInfo.childPositions.unshift(getChildPosition(element));
         element = element.parentElement;
     }
-    if (element === containerElement && activeElement.childPositions.length) return activeElement;
+    if (element === container && activeElementInfo.childPositions.length) return activeElementInfo;
 }
 
 function getChildPosition(element: Element): number {
