@@ -29,12 +29,12 @@ export interface AttributeMap {
 
 type SelectionDirection = "forward" | "backward" | "none";
 
-interface ChildPosition {
-    childIndex: number;
-    scrollTop: number;
-    selectionStart: number;
-    selectionEnd: number;
-    selectionDirection: string;
+export interface ActiveElement {
+    childPositions: number[];
+    scrollTop?: number;
+    selectionStart?: number;
+    selectionEnd?: number;
+    selectionDirection?: string;
 }
 
 export function createElement<T>(tag: StatelessComponent<T>, attrs: StatelessProps<T>, ...children: JSX.Element[]);
@@ -118,46 +118,51 @@ function isElement(el: Element | JSX.Element | any) {
 }
 
 export function mount(element: Element | JSX.Element, container: HTMLElement) {
-    const activeChildPositions = getActiveChildPositions(container);
+    const activeChildPosition = getActiveChildPosition(container);
     container.innerHTML = '';
     if (element) {
         addChild(container, element);
-        if (activeChildPositions) focusChildAtPosition(container, activeChildPositions);
+        if (activeChildPosition) focusChildAtPosition(container, activeChildPosition);
     }
 }
 
-function focusChildAtPosition(element: Element, childPositions: ChildPosition[]) {
-    let childPosition: ChildPosition;
-    while (element && childPositions.length) {
-        childPosition = childPositions.shift()
-        element = element.children.item(childPosition.childIndex);
+export function focusChildAtPosition(element: Element, activeElement: ActiveElement) {
+    let childPosition: number;
+    while (element && activeElement.childPositions.length) {
+        childPosition = activeElement.childPositions.shift()
+        element = element.children.item(childPosition);
     }
     if (element) {
         const el = element as HTMLInputElement; //cast to input or textarea
         el.focus();
-        if (childPosition && childPosition.selectionStart != null && childPosition.selectionEnd != null) {
-            el.setSelectionRange(childPosition.selectionStart, childPosition.selectionEnd, childPosition.selectionDirection as SelectionDirection);
-            el.scrollTop = childPosition.scrollTop;
+        if (activeElement && activeElement.selectionStart != null && activeElement.selectionEnd != null) {
+            el.setSelectionRange(activeElement.selectionStart, activeElement.selectionEnd, activeElement.selectionDirection as SelectionDirection);
+            el.scrollTop = activeElement.scrollTop;
         }
     };
 }
 
-function getActiveChildPositions(containerElement: HTMLElement) {
-    let active = document.activeElement;
-    const childPositions: ChildPosition[] = [];
-    while (active && active !== document.body && active !== containerElement) {
-        childPositions.unshift(childPosition(active));
-        active = active.parentElement;
+export function getActiveChildPosition(containerElement: HTMLElement) {
+    let element = document.activeElement;
+    const { scrollTop, selectionDirection, selectionEnd, selectionStart } = element as HTMLInputElement;
+    const activeElement: ActiveElement = {
+        childPositions: [],
+        scrollTop,
+        selectionDirection,
+        selectionEnd,
+        selectionStart
+    };
+    while (element && element !== document.body && element !== containerElement) {
+        activeElement.childPositions.unshift(getChildPosition(element));
+        element = element.parentElement;
     }
-    if (active === containerElement && childPositions.length) return childPositions;
+    if (element === containerElement && activeElement.childPositions.length) return activeElement;
 }
 
-function childPosition(element: Element): ChildPosition {
-    const el = element as HTMLInputElement;
-    const { scrollTop, selectionDirection, selectionEnd, selectionStart } = el;
-    let childIndex = 0;
-    while (element = element.previousElementSibling) childIndex++;
-    return { childIndex, selectionStart, selectionEnd, selectionDirection, scrollTop };
+function getChildPosition(element: Element): number {
+    let childPosition = 0;
+    while (element = element.previousElementSibling) childPosition++;
+    return childPosition;
 }
 
 function tagNamespace(tag: string) {
