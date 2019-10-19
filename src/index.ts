@@ -118,20 +118,20 @@ function isElement(el: Element | JSX.Element | any) {
 }
 
 export function mount(element: Element | JSX.Element, container: HTMLElement) {
-    const activeChildPosition = getActiveElementInfo(container);
+    const activeElementInfo = getActiveElementInfo(container);
     container.innerHTML = '';
     if (element) {
         addChild(container, element);
-        if (activeChildPosition) {
-            const input = findChildAtPosition(container, activeChildPosition);
+        if (activeElementInfo) {
+            const input = findActiveElementByChildPosition(container, activeElementInfo);
             if (input) {
-                focusChildAtPosition(input, activeChildPosition);
+                focusActiveElement(input, activeElementInfo);
             }
         }
     }
 }
 
-function findChildAtPosition(container: Element, activeElementInfo: ActiveElementInfo) {
+function findActiveElementByChildPosition(container: Element, activeElementInfo: ActiveElementInfo) {
     let element = container;
     let childPosition: number;
     while (element && activeElementInfo.childPositions.length) {
@@ -143,7 +143,7 @@ function findChildAtPosition(container: Element, activeElementInfo: ActiveElemen
     };
 }
 
-export function focusChildAtPosition(input: HTMLInputElement, activeElementInfo: ActiveElementInfo) {
+export function focusActiveElement(input: HTMLInputElement, activeElementInfo: ActiveElementInfo) {
     input.focus();
     if (activeElementInfo && activeElementInfo.selectionStart != null && activeElementInfo.selectionEnd != null) {
         input.setSelectionRange(activeElementInfo.selectionStart, activeElementInfo.selectionEnd, activeElementInfo.selectionDirection as SelectionDirection);
