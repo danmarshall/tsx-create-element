@@ -1,5 +1,5 @@
 import { createElement, mount, getActiveElementInfo, focusActiveElement, findElementByChildPositions, setActiveElement } from '../dist/es6/index';
-import { App } from './app';
+import { Layout } from './layout';
 
 let count = 0;
 let title = "tsx-create-element test app";
@@ -56,7 +56,7 @@ function update() {
     mount(
         //note: the layout will detach and append our input above, so it loses its focus and selectionrange.
         //make sure to call getActiveElementInfo prior to calling App
-        App({ title, count, buttonClick, input, subComponentText, textAreaChange }),
+        Layout({ title, count, buttonClick, input, subComponentText, textAreaChange }),
         document.getElementById('app')
     );
 }

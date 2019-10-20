@@ -10,7 +10,7 @@ export interface Props {
     textAreaChange: (index: number, value: HTMLTextAreaElement) => void;
 }
 
-export const App = (props: Props) => {
+export const Layout = (props: Props) => {
     return (
         <div>
             <h1 className="foo">{props.title}</h1>
