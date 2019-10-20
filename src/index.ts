@@ -118,40 +118,43 @@ function isElement(el: Element | JSX.Element | any) {
 }
 
 export function mount(element: Element | JSX.Element, container: HTMLElement) {
-    const activeElementInfo = getActiveElementInfo(container);
     container.innerHTML = '';
     if (element) {
         addChild(container, element);
-        if (activeElementInfo) {
-            const input = findElementByChildPositions(container, activeElementInfo.childPositions);
-            if (input) {
-                focusActiveElement(input, activeElementInfo);
-            }
-        }
     }
 }
 
-export function findElementByChildPositions(container: Element, childPositions: number[]) {
-    let element = container;
+export function findElementByChildPositions(childPositions: number[], container?: Element) {
+    let element = container || document.body;
     let childPosition: number;
     while (element && childPositions.length) {
         childPosition = childPositions.shift()
         element = element.children.item(childPosition);
     }
     if (element) {
-        return element as HTMLInputElement; //cast to input or textarea;
+        return element as HTMLElement;
     };
 }
 
-export function focusActiveElement(input: HTMLInputElement | HTMLTextAreaElement, activeElementInfo: ActiveElementInfo) {
-    input.focus();
-    if (activeElementInfo && activeElementInfo.selectionStart != null && activeElementInfo.selectionEnd != null) {
+export function focusActiveElement(element: HTMLElement, activeElementInfo: ActiveElementInfo) {
+    element.focus();
+    element.scrollTop = activeElementInfo.scrollTop;
+    const input = element as HTMLInputElement | HTMLTextAreaElement
+    if (input.setSelectionRange && activeElementInfo && activeElementInfo.selectionStart != null && activeElementInfo.selectionEnd != null) {
         input.setSelectionRange(activeElementInfo.selectionStart, activeElementInfo.selectionEnd, activeElementInfo.selectionDirection as SelectionDirection);
-        input.scrollTop = activeElementInfo.scrollTop;
     }
 }
 
-export function getActiveElementInfo(container: HTMLElement) {
+export function setActiveElement(activeElementInfo: ActiveElementInfo, container?: Element) {
+    if (activeElementInfo) {
+        const element = findElementByChildPositions(activeElementInfo.childPositions, container);
+        if (element) {
+            focusActiveElement(element, activeElementInfo);
+        }
+    }
+}
+
+export function getActiveElementInfo(container?: HTMLElement) {
     let element = document.activeElement;
     const { scrollTop, selectionDirection, selectionEnd, selectionStart } = element as HTMLInputElement;
     const activeElementInfo: ActiveElementInfo = {
@@ -165,7 +168,7 @@ export function getActiveElementInfo(container: HTMLElement) {
         activeElementInfo.childPositions.unshift(getChildPosition(element));
         element = element.parentElement;
     }
-    if (element === container && activeElementInfo.childPositions.length) return activeElementInfo;
+    if ((element === document.body || element === container) && activeElementInfo.childPositions.length) return activeElementInfo;
 }
 
 function getChildPosition(element: Element): number {
