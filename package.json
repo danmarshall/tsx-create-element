@@ -12,6 +12,7 @@
     "build": "tsc -p .",
     "watch": "tsc -p . -w",
     "build-test": "tsc -p test",
+    "build-all": "npm run build && npm run build-test",
     "test": "npm run build && npm run build-test",
     "test-watch": "tsc -p test -w",
     "uitest": "parcel serve ./test/index.html --open",
