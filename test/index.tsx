@@ -9,6 +9,8 @@ const buttonClick = () => {
     updateRetainFocus();
 };
 
+//this textbox is created here, and is an example of a textbox that is reused across every render pass
+//which means it has its own state, and the user can use ctrl-z etc.
 const input = (
     <input
         ref={input => {
