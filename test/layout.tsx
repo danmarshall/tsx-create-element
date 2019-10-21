@@ -5,22 +5,22 @@ export interface Props {
     title: string;
     count: number;
     buttonClick: () => void;
-    onTitleInputRef: (input: HTMLInputElement) => void;
+    input: JSX.Element;
     subComponentText: string[];
-    onSubComponentTextareaRef: (textarea: HTMLTextAreaElement, i: number) => void;
+    textAreaChange: (index: number, value: HTMLTextAreaElement) => void;
 }
 
-export const App = (props: Props) => {
+export const Layout = (props: Props) => {
     return (
         <div>
             <h1 className="foo">{props.title}</h1>
-            <input ref={input => props.onTitleInputRef(input)} type="text" value={props.title} spellCheck={false} />
+            {props.input}
             <div>count is: {props.count}</div>
             <button onClick={() => props.buttonClick()}>add</button>
             <button onClick={() => props.buttonClick()} style={{ marginLeft: "1em" }}>I also add</button>
             <button onClick={() => props.buttonClick()} disabled={true} style={{ marginLeft: "1em" }}>this is disabled</button>
             {props.subComponentText.map((t, i) => (
-                <SubComponent someText={t} onTextareaRef={ta => props.onSubComponentTextareaRef(ta, i)}>
+                <SubComponent someText={t} textAreaChange={v => props.textAreaChange(i, v)}>
                     component {i} content
                 </SubComponent>
             ))}
