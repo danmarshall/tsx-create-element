@@ -8,6 +8,7 @@
     "dist/es6/*"
   ],
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "bundle": "npm run test && parcel build ./tmp/index.js --no-minify --no-source-maps --out-dir ./docs",
     "build": "tsc -p .",
     "watch": "tsc -p . -w",
@@ -43,5 +44,9 @@
     "npm-run-all": "^4.1.5",
     "parcel": "^1.12.4",
     "typescript": "^2.7.2"
+  },
+  "resolutions": {
+    "minimist": "1.2.3",
+    "mkdir": "0.5.3"
   }
 }
