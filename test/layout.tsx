@@ -18,7 +18,8 @@ export const Layout = (props: Props) => {
             <div>count is: {props.count}</div>
             <button onClick={() => props.buttonClick()}>add</button>
             <button onClick={() => props.buttonClick()} style={{ marginLeft: "1em" }}>I also add</button>
-            <button onClick={() => props.buttonClick()} disabled={true} style={{ marginLeft: "1em" }}>this is disabled</button>
+            <button onClick={() => props.buttonClick()} disabled={true} style={{ marginLeft: "1em" }}>this is disabled..</button>
+            <button onClick={() => props.buttonClick()} disabled={false} style={{ marginLeft: "1em" }}>disabled = false</button>
             {props.subComponentText.map((t, i) => (
                 <SubComponent someText={t} textAreaChange={v => props.textAreaChange(i, v)}>
                     component {i} content
