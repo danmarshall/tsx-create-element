@@ -98,7 +98,7 @@ function flatten(o: object) {
     return arr.join(';');
 }
 
-function addChild(parentElement: Element, child: Element | Content | JSX.Element | (Element | Content)[]) {
+export function addChild(parentElement: Element, child: Element | Content | JSX.Element | (Element | Content)[]) {
     if (child === null || child === undefined || typeof child === "boolean") {
         return;
     } else if (Array.isArray(child)) {
