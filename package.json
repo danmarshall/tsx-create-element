@@ -1,6 +1,6 @@
 {
   "name": "tsx-create-element",
-  "version": "2.2.2",
+  "version": "2.2.4",
   "description": "Use TypeScript TSX without React",
   "main": "dist/es6/index.js",
   "types": "dist/es6/index.d.ts",
@@ -8,6 +8,7 @@
     "dist/es6/*"
   ],
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "bundle": "npm run test && parcel build ./tmp/index.js --no-minify --no-source-maps --out-dir ./docs",
     "build": "tsc -p .",
     "watch": "tsc -p . -w",
@@ -43,5 +44,8 @@
     "npm-run-all": "^4.1.5",
     "parcel": "^1.12.4",
     "typescript": "^2.7.2"
+  },
+  "resolutions": {
+    "node-forge": "0.10.0"
   }
 }
