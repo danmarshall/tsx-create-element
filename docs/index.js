@@ -425,10 +425,11 @@ function tagNamespace(tag) {
 "use strict";
 
 exports.__esModule = true;
+exports.SubComponent = void 0;
 
 var index_1 = require("../dist/es6/index");
 
-exports.SubComponent = function (props) {
+var SubComponent = function SubComponent(props) {
   var textChangeHandler = function textChangeHandler(e) {
     return props.textAreaChange(e.currentTarget);
   };
@@ -446,16 +447,19 @@ exports.SubComponent = function (props) {
     spellCheck: false
   }, props.someText));
 };
+
+exports.SubComponent = SubComponent;
 },{"../dist/es6/index":"St5X"}],"C3c2":[function(require,module,exports) {
 "use strict";
 
 exports.__esModule = true;
+exports.Layout = void 0;
 
 var es6_1 = require("../dist/es6");
 
 var subcomponent_1 = require("./subcomponent");
 
-exports.Layout = function (props) {
+var Layout = function Layout(props) {
   return es6_1.createElement("div", null, es6_1.createElement("h1", {
     className: "foo"
   }, props.title), props.input, es6_1.createElement("div", null, "count is: ", props.count), es6_1.createElement("button", {
@@ -523,6 +527,8 @@ exports.Layout = function (props) {
     }
   }))));
 };
+
+exports.Layout = Layout;
 },{"../dist/es6":"St5X","./subcomponent":"VMCN"}],"Focm":[function(require,module,exports) {
 "use strict";
 
