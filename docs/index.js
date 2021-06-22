@@ -206,7 +206,7 @@ module.exports = [
 	"view",
 	"vkern"
 ];
-},{}],"Huye":[function(require,module,exports) {
+},{}],"6Huy":[function(require,module,exports) {
 module.exports = require( './svg-tags.json' );
 },{"./svg-tags.json":"N8DI"}],"St5X":[function(require,module,exports) {
 "use strict";
@@ -215,17 +215,22 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.createElement = createElement;
+exports.addChild = addChild;
 exports.mount = mount;
+exports.findElementByChildPositions = findElementByChildPositions;
+exports.focusActiveElement = focusActiveElement;
+exports.setActiveElement = setActiveElement;
+exports.getActiveElementInfo = getActiveElementInfo;
 
 var htmlTags = _interopRequireWildcard(require("html-tags"));
 
 var svgTags = _interopRequireWildcard(require("svg-tags"));
 
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /**
  * Decamelizes a string with/without a custom separator (hyphen by default).
@@ -261,6 +266,7 @@ function createElement(tag, attrs) {
 
         if (name === 'className' && value !== void 0) {
           setAttribute(el, ns, 'class', value.toString());
+        } else if (name === 'disabled' && !value) {//do nothhing, omit this attribute
         } else if (value === null || value === undefined) {
           continue;
         } else if (value === true) {
@@ -333,68 +339,80 @@ function isElement(el) {
 }
 
 function mount(element, container) {
-  var activeChildPositions = getActiveChildPositions(container);
   container.innerHTML = '';
 
   if (element) {
     addChild(container, element);
-    if (activeChildPositions) focusChildAtPosition(container, activeChildPositions);
   }
 }
 
-function focusChildAtPosition(element, childPositions) {
+function findElementByChildPositions(childPositions, container) {
+  var element = container || document.body;
   var childPosition;
 
   while (element && childPositions.length) {
     childPosition = childPositions.shift();
-    element = element.children.item(childPosition.childIndex);
+    element = element.children.item(childPosition);
   }
 
   if (element) {
-    var el = element; //cast to input or textarea
-
-    el.focus();
-
-    if (childPosition && childPosition.selectionStart != null && childPosition.selectionEnd != null) {
-      el.setSelectionRange(childPosition.selectionStart, childPosition.selectionEnd, childPosition.selectionDirection);
-      el.scrollTop = childPosition.scrollTop;
-    }
+    return element;
   }
 
   ;
 }
 
-function getActiveChildPositions(containerElement) {
-  var active = document.activeElement;
-  var childPositions = [];
+function focusActiveElement(element, activeElementInfo) {
+  element.focus();
+  element.scrollTop = activeElementInfo.scrollTop;
+  var input = element;
 
-  while (active && active !== document.body && active !== containerElement) {
-    childPositions.unshift(childPosition(active));
-    active = active.parentElement;
+  if (input.setSelectionRange && activeElementInfo && activeElementInfo.selectionStart != null && activeElementInfo.selectionEnd != null) {
+    input.setSelectionRange(activeElementInfo.selectionStart, activeElementInfo.selectionEnd, activeElementInfo.selectionDirection);
   }
-
-  if (active === containerElement && childPositions.length) return childPositions;
 }
 
-function childPosition(element) {
-  var el = element;
-  var scrollTop = el.scrollTop,
-      selectionDirection = el.selectionDirection,
-      selectionEnd = el.selectionEnd,
-      selectionStart = el.selectionStart;
-  var childIndex = 0;
+function setActiveElement(activeElementInfo, container) {
+  if (activeElementInfo) {
+    var element = findElementByChildPositions(activeElementInfo.childPositions, container);
 
-  while (element = element.previousElementSibling) {
-    childIndex++;
+    if (element) {
+      focusActiveElement(element, activeElementInfo);
+    }
+  }
+}
+
+function getActiveElementInfo(container) {
+  var element = document.activeElement;
+  var _element = element,
+      scrollTop = _element.scrollTop,
+      selectionDirection = _element.selectionDirection,
+      selectionEnd = _element.selectionEnd,
+      selectionStart = _element.selectionStart;
+  var activeElementInfo = {
+    childPositions: [],
+    scrollTop: scrollTop,
+    selectionDirection: selectionDirection,
+    selectionEnd: selectionEnd,
+    selectionStart: selectionStart
+  };
+
+  while (element && element !== document.body && element !== container) {
+    activeElementInfo.childPositions.unshift(getChildPosition(element));
+    element = element.parentElement;
   }
 
-  return {
-    childIndex: childIndex,
-    selectionStart: selectionStart,
-    selectionEnd: selectionEnd,
-    selectionDirection: selectionDirection,
-    scrollTop: scrollTop
-  };
+  if ((element === document.body || element === container) && activeElementInfo.childPositions.length) return activeElementInfo;
+}
+
+function getChildPosition(element) {
+  var childPosition = 0;
+
+  while (element = element.previousElementSibling) {
+    childPosition++;
+  }
+
+  return childPosition;
 }
 
 function tagNamespace(tag) {
@@ -403,7 +421,7 @@ function tagNamespace(tag) {
     return "http://www.w3.org/2000/svg";
   }
 }
-},{"html-tags":"VNeM","svg-tags":"Huye"}],"VMCN":[function(require,module,exports) {
+},{"html-tags":"VNeM","svg-tags":"6Huy"}],"VMCN":[function(require,module,exports) {
 "use strict";
 
 exports.__esModule = true;
@@ -411,6 +429,10 @@ exports.__esModule = true;
 var index_1 = require("../dist/es6/index");
 
 exports.SubComponent = function (props) {
+  var textChangeHandler = function textChangeHandler(e) {
+    return props.textAreaChange(e.currentTarget);
+  };
+
   return index_1.createElement("div", {
     style: {
       border: "1px solid black",
@@ -418,13 +440,13 @@ exports.SubComponent = function (props) {
       padding: "0.5em"
     }
   }, index_1.createElement("div", null, "Text is: ", props.someText), index_1.createElement("div", null, "Children:", index_1.createElement("div", null, props.children)), index_1.createElement("textarea", {
-    ref: function ref(t) {
-      return props.onTextareaRef(t);
-    },
+    onKeyPress: textChangeHandler,
+    onKeyUp: textChangeHandler,
+    onKeyDown: textChangeHandler,
     spellCheck: false
   }, props.someText));
 };
-},{"../dist/es6/index":"St5X"}],"A2T1":[function(require,module,exports) {
+},{"../dist/es6/index":"St5X"}],"C3c2":[function(require,module,exports) {
 "use strict";
 
 exports.__esModule = true;
@@ -433,17 +455,10 @@ var es6_1 = require("../dist/es6");
 
 var subcomponent_1 = require("./subcomponent");
 
-exports.App = function (props) {
+exports.Layout = function (props) {
   return es6_1.createElement("div", null, es6_1.createElement("h1", {
     className: "foo"
-  }, props.title), es6_1.createElement("input", {
-    ref: function ref(input) {
-      return props.onTitleInputRef(input);
-    },
-    type: "text",
-    value: props.title,
-    spellCheck: false
-  }), es6_1.createElement("div", null, "count is: ", props.count), es6_1.createElement("button", {
+  }, props.title), props.input, es6_1.createElement("div", null, "count is: ", props.count), es6_1.createElement("button", {
     onClick: function onClick() {
       return props.buttonClick();
     }
@@ -462,11 +477,19 @@ exports.App = function (props) {
     style: {
       marginLeft: "1em"
     }
-  }, "this is disabled"), props.subComponentText.map(function (t, i) {
+  }, "this is disabled.."), es6_1.createElement("button", {
+    onClick: function onClick() {
+      return props.buttonClick();
+    },
+    disabled: false,
+    style: {
+      marginLeft: "1em"
+    }
+  }, "disabled = false"), props.subComponentText.map(function (t, i) {
     return es6_1.createElement(subcomponent_1.SubComponent, {
       someText: t,
-      onTextareaRef: function onTextareaRef(ta) {
-        return props.onSubComponentTextareaRef(ta, i);
+      textAreaChange: function textAreaChange(v) {
+        return props.textAreaChange(i, v);
       }
     }, "component ", i, " content");
   }), "namespaced element (svg):", es6_1.createElement("div", null, es6_1.createElement("svg", {
@@ -507,49 +530,67 @@ exports.__esModule = true;
 
 var index_1 = require("../dist/es6/index");
 
-var app_1 = require("./app");
+var layout_1 = require("./layout");
 
 var count = 0;
 var title = "tsx-create-element test app";
 
 var buttonClick = function buttonClick() {
   count++;
-  update();
-};
+  updateRetainFocus();
+}; //this textbox is created here, and is an example of a textbox that is reused across every render pass
+//which means it has its own state, and the user can use ctrl-z etc.
 
-var onTitleInputRef = function onTitleInputRef(input) {
-  input.onkeypress = input.onkeydown = input.onkeyup = input.onchange = function () {
-    //do not invoke mount() directly within this handler,
-    //otherwise the element will be orphaned
-    //so wrap it within requestAnimationFrame 
-    requestAnimationFrame(function () {
-      title = input.value;
-      update();
-    });
-  };
-};
 
-var onSubComponentTextareaRef = function onSubComponentTextareaRef(textarea, i) {
-  textarea.onkeypress = textarea.onkeydown = textarea.onkeyup = textarea.onchange = function () {
-    requestAnimationFrame(function () {
-      subComponentText[i] = textarea.value;
-      update();
-    });
-  };
+var input = index_1.createElement("input", {
+  ref: function ref(input) {
+    input.onkeypress = input.onkeydown = input.onkeyup = input.onchange = function () {
+      //do not invoke mount() directly within this handler,
+      //otherwise the element will not be disposed,
+      //so wrap it within requestAnimationFrame 
+      requestAnimationFrame(function () {
+        //additionally, the .value is not available until the handler exits
+        //so get the value inside requestAnimationFrame  
+        title = input.value;
+        updateRetainFocus();
+      });
+    };
+  },
+  type: "text",
+  value: title,
+  spellCheck: false
+});
+
+var textAreaChange = function textAreaChange(index, textArea) {
+  //pass the entire textarea so we can get it's value by reference after the next tick
+  requestAnimationFrame(function () {
+    subComponentText[index] = textArea.value;
+    updateRetainFocus();
+  });
 };
 
 var subComponentText = ['a component', 'another component'];
 
+function updateRetainFocus() {
+  //get the focused element's position and selectionrange
+  var a = index_1.getActiveElementInfo();
+  update(); //re-set the focus and selectionrange after the update
+
+  index_1.setActiveElement(a);
+}
+
 function update() {
-  index_1.mount(app_1.App({
+  index_1.mount( //note: the layout will detach and append our input above, so it loses its focus and selectionrange.
+  //make sure to call getActiveElementInfo prior to calling App
+  layout_1.Layout({
     title: title,
     count: count,
     buttonClick: buttonClick,
-    onTitleInputRef: onTitleInputRef,
+    input: input,
     subComponentText: subComponentText,
-    onSubComponentTextareaRef: onSubComponentTextareaRef
+    textAreaChange: textAreaChange
   }), document.getElementById('app'));
 }
 
 update();
-},{"../dist/es6/index":"St5X","./app":"A2T1"}]},{},["Focm"], null)
+},{"../dist/es6/index":"St5X","./layout":"C3c2"}]},{},["Focm"], null)
