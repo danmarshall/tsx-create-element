@@ -8,7 +8,6 @@
     "dist/es6/*"
   ],
   "scripts": {
-    "dev-force-resolutions": "npx npm-force-resolutions",
     "parcel-build": "parcel build ./tmp/index.js --no-minify --no-source-maps --out-dir ./docs",
     "bundle": "npm run test && npx -p parcel@1.12.3 npm run parcel-build",
     "build": "tsc -p .",
@@ -44,8 +43,5 @@
   "devDependencies": {
     "@types/react": "^16.4.2",
     "typescript": "^2.7.2"
-  },
-  "resolutions": {
-    "is-svg": "^4.2.2"
   }
 }
