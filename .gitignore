@@ -66,3 +66,4 @@ tmp
 
 # parcel cache
 .cache
+.jekyll-cache
