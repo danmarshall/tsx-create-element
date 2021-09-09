@@ -1,6 +1,9 @@
 import * as htmlTags from 'html-tags';
 import * as svgTags from 'svg-tags';
 
+const htmlTagArray: string[] = htmlTags.default || htmlTags;
+const svgTagArray: string[] = svgTags.default || svgTags;
+
 /**
  * Decamelizes a string with/without a custom separator (hyphen by default).
  * from: https://ourcodeworld.com/articles/read/608/how-to-camelize-and-decamelize-strings-in-javascript
@@ -181,7 +184,7 @@ function getChildPosition(element: Element): number {
 
 function tagNamespace(tag: string) {
     //issue: this won't disambiguate certain tags which exist in both svg and html: <a>, <title> ...
-    if (tag === 'svg' || (svgTags.default.indexOf(tag) >= 0 && !(htmlTags.default.indexOf(tag) >= 0))) {
+    if (tag === 'svg' || (svgTagArray.indexOf(tag) >= 0 && !(htmlTagArray.indexOf(tag) >= 0))) {
         return "http://www.w3.org/2000/svg";
     }
 }
