@@ -36,9 +36,7 @@
   "peerDependencies": {
     "@types/react": "*"
   },
-  "dependencies": {
-    "jsdom": "^26.1.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/react": "^16.4.2",
     "typescript": "^4.3.4"

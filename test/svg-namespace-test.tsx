@@ -31,7 +31,13 @@ export const SvgNamespaceTest = () => {
             </svg>
             
             <p><strong>All elements above should use SVG namespace (http://www.w3.org/2000/svg)</strong></p>
-            <p>Compare with HTML <a href="#html-link">anchor elements</a> which use HTML namespace</p>
+            
+            <h3>HTML Elements (for comparison)</h3>
+            <p>Compare with HTML elements which use HTML namespace:</p>
+            <a href="#html-link1">HTML Link 1</a>
+            <a href="#html-link2">HTML Link 2</a>
+            <a href="#html-link3">HTML Link 3</a>
+            
             <p>Before the fix: overlapping tags like &lt;a&gt;, &lt;title&gt;, &lt;style&gt; would use HTML namespace</p>
             <p>After the fix: all elements inside &lt;svg&gt; automatically use SVG namespace</p>
         </div>
