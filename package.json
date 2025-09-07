@@ -37,9 +37,7 @@
     "@types/react": "*"
   },
   "dependencies": {
-    "html-tags": "^2.0.0",
-    "jsdom": "^26.1.0",
-    "svg-tags": "^1.0.0"
+    "jsdom": "^26.1.0"
   },
   "devDependencies": {
     "@types/react": "^16.4.2",
