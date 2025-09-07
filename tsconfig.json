@@ -4,7 +4,8 @@
         "jsx": "react",
         "moduleResolution": "node",
         "outDir": "dist/es6",
-        "target": "es6"
+        "target": "es6",
+        "types": ["react"]
     },
     "include": [
         "src"
