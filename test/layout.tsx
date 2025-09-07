@@ -1,6 +1,6 @@
 import { createElement } from '../dist/es6';
 import { SubComponent } from './subcomponent';
-import { SvgTest } from './svg-test';
+import { SvgNamespaceTest } from './svg-namespace-test';
 
 export interface Props {
     title: string;
@@ -34,7 +34,7 @@ export const Layout = (props: Props) => {
                     <line x1="0" y1="100%" x2="100%" y2="0" style={{ strokeWidth: 1, stroke: 'red' }} />
                 </svg>
             </div>
-            <SvgTest />
+            <SvgNamespaceTest />
         </div>
     );
 }

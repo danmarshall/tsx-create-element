@@ -101,13 +101,57 @@ function flatten(o: object) {
     return arr.join(';');
 }
 
+function isInsideForeignObject(element: Element): boolean {
+    let current = element;
+    while (current) {
+        if (current.tagName.toLowerCase() === 'foreignobject') {
+            return true;
+        }
+        current = current.parentElement;
+    }
+    return false;
+}
+
+function recreateWithSvgNamespace(element: Element): Element {
+    const svgElement = document.createElementNS("http://www.w3.org/2000/svg", element.tagName);
+    
+    // Copy attributes
+    for (let i = 0; i < element.attributes.length; i++) {
+        const attr = element.attributes[i];
+        svgElement.setAttributeNS(null, attr.name, attr.value);
+    }
+    
+    // Copy children recursively
+    for (let i = 0; i < element.childNodes.length; i++) {
+        const child = element.childNodes[i];
+        if (child.nodeType === Node.ELEMENT_NODE) {
+            svgElement.appendChild(recreateWithSvgNamespace(child as Element));
+        } else {
+            svgElement.appendChild(child.cloneNode(true));
+        }
+    }
+    
+    return svgElement;
+}
+
 export function addChild(parentElement: Element, child: Element | Content | JSX.Element | (Element | Content)[]) {
     if (child === null || child === undefined || typeof child === "boolean") {
         return;
     } else if (Array.isArray(child)) {
         appendChildren(parentElement, child);
     } else if (isElement(child)) {
-        parentElement.appendChild(child as Element);
+        const childEl = child as Element;
+        // If parent is SVG and child was created with wrong namespace, recreate it
+        // Exception: don't recreate elements inside foreignObject as they should remain HTML
+        if (parentElement.namespaceURI === "http://www.w3.org/2000/svg" && 
+            childEl.namespaceURI !== "http://www.w3.org/2000/svg" &&
+            childEl.tagName.toLowerCase() !== 'foreignobject' &&
+            !isInsideForeignObject(parentElement)) {
+            const recreated = recreateWithSvgNamespace(childEl);
+            parentElement.appendChild(recreated);
+        } else {
+            parentElement.appendChild(childEl);
+        }
     } else {
         parentElement.appendChild(document.createTextNode(child.toString()));
     }
