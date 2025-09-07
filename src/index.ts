@@ -1,3 +1,5 @@
+const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
+
 /**
  * Decamelizes a string with/without a custom separator (hyphen by default).
  * from: https://ourcodeworld.com/articles/read/608/how-to-camelize-and-decamelize-strings-in-javascript
@@ -107,7 +109,7 @@ function isInsideForeignObject(element: Element): boolean {
 }
 
 function recreateWithSvgNamespace(element: Element): Element {
-    const svgElement = document.createElementNS("http://www.w3.org/2000/svg", element.tagName);
+    const svgElement = document.createElementNS(SVG_NAMESPACE, element.tagName);
     
     // Copy attributes
     for (let i = 0; i < element.attributes.length; i++) {
@@ -137,8 +139,8 @@ export function addChild(parentElement: Element, child: Element | Content | JSX.
         const childEl = child as Element;
         // If parent is SVG and child was created with wrong namespace, recreate it
         // Exception: don't recreate elements inside foreignObject as they should remain HTML
-        if (parentElement.namespaceURI === "http://www.w3.org/2000/svg" && 
-            childEl.namespaceURI !== "http://www.w3.org/2000/svg" &&
+        if (parentElement.namespaceURI === SVG_NAMESPACE && 
+            childEl.namespaceURI !== SVG_NAMESPACE &&
             childEl.tagName.toLowerCase() !== 'foreignobject' &&
             !isInsideForeignObject(parentElement)) {
             const recreated = recreateWithSvgNamespace(childEl);
@@ -224,6 +226,6 @@ function tagNamespace(tag: string) {
     // Only handle the root 'svg' element - all other elements will be handled
     // dynamically by the addChild function when they're added to SVG parents
     if (tag === 'svg') {
-        return "http://www.w3.org/2000/svg";
+        return SVG_NAMESPACE;
     }
 }
