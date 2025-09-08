@@ -1,3 +1,9 @@
+declare global {
+    namespace JSX {
+        interface Element extends HTMLElement {}
+    }
+}
+
 const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 
 /**
@@ -41,8 +47,15 @@ export function createElement(tag: string, attrs: AttributeMap, ...children: (El
 export function createElement(tag: any, attrs: any, ...children: any[]) {
     if (typeof tag === 'function') {
         const fn = tag as StatelessComponent<{}>;
-        const props = attrs as StatelessProps<{}>;
-        props.children = children;
+        let props = attrs as StatelessProps<{}>;
+        
+        // Handle case where props is null but children are provided
+        if (props === null || props === undefined) {
+            props = { children } as StatelessProps<{}>;
+        } else {
+            props.children = children;
+        }
+        
         return fn(props);
     } else {
         const ns = tagNamespace(tag);
