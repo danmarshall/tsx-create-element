@@ -130,6 +130,17 @@ function recreateWithSvgNamespace(element: Element): Element {
         svgElement.setAttributeNS(null, attr.name, attr.value);
     }
     
+    // Copy event handlers and other properties
+    // Common event handlers that need to be copied
+    const eventProperties = ['onclick', 'onmousedown', 'onmouseup', 'onmouseover', 'onmouseout', 
+                           'onmousemove', 'onkeydown', 'onkeyup', 'onkeypress', 'onfocus', 'onblur'];
+    
+    for (const prop of eventProperties) {
+        if (element[prop]) {
+            svgElement[prop] = element[prop];
+        }
+    }
+    
     // Copy children recursively
     for (let i = 0; i < element.childNodes.length; i++) {
         const child = element.childNodes[i];
