@@ -6,7 +6,7 @@ interface Props {
 }
 
 export const SubComponent: StatelessComponent<Props> = (props: StatelessProps<Props>) => {
-    const textChangeHandler = (e: KeyboardEvent) => props.textAreaChange(e.currentTarget as HTMLTextAreaElement);
+    const textChangeHandler = (e: React.KeyboardEvent<HTMLTextAreaElement>) => props.textAreaChange(e.currentTarget);
     return (
         <div style={{ border: "1px solid black", margin: "0.5em 0", padding: "0.5em" }}>
             <div>Text is: {props.someText}</div>

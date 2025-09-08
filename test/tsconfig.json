@@ -3,6 +3,7 @@
         "jsx": "react",
         "jsxFactory": "createElement",
         "lib": ["es5", "es6", "DOM"],
-        "outDir": "../tmp"
+        "outDir": "../tmp",
+        "types": ["react"]
     }
 }
