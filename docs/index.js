@@ -117,121 +117,23 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"n8nd":[function(require,module,exports) {
-module.exports = ["a", "abbr", "address", "area", "article", "aside", "audio", "b", "base", "bdi", "bdo", "blockquote", "body", "br", "button", "canvas", "caption", "cite", "code", "col", "colgroup", "data", "datalist", "dd", "del", "details", "dfn", "dialog", "div", "dl", "dt", "em", "embed", "fieldset", "figcaption", "figure", "footer", "form", "h1", "h2", "h3", "h4", "h5", "h6", "head", "header", "hgroup", "hr", "html", "i", "iframe", "img", "input", "ins", "kbd", "keygen", "label", "legend", "li", "link", "main", "map", "mark", "math", "menu", "menuitem", "meta", "meter", "nav", "noscript", "object", "ol", "optgroup", "option", "output", "p", "param", "picture", "pre", "progress", "q", "rb", "rp", "rt", "rtc", "ruby", "s", "samp", "script", "section", "select", "slot", "small", "source", "span", "strong", "style", "sub", "summary", "sup", "svg", "table", "tbody", "td", "template", "textarea", "tfoot", "th", "thead", "time", "title", "tr", "track", "u", "ul", "var", "video", "wbr"];
-},{}],"VNeM":[function(require,module,exports) {
-'use strict';
-
-module.exports = require('./html-tags.json');
-},{"./html-tags.json":"n8nd"}],"N8DI":[function(require,module,exports) {
-module.exports = [
-	"a",
-	"altGlyph",
-	"altGlyphDef",
-	"altGlyphItem",
-	"animate",
-	"animateColor",
-	"animateMotion",
-	"animateTransform",
-	"circle",
-	"clipPath",
-	"color-profile",
-	"cursor",
-	"defs",
-	"desc",
-	"ellipse",
-	"feBlend",
-	"feColorMatrix",
-	"feComponentTransfer",
-	"feComposite",
-	"feConvolveMatrix",
-	"feDiffuseLighting",
-	"feDisplacementMap",
-	"feDistantLight",
-	"feFlood",
-	"feFuncA",
-	"feFuncB",
-	"feFuncG",
-	"feFuncR",
-	"feGaussianBlur",
-	"feImage",
-	"feMerge",
-	"feMergeNode",
-	"feMorphology",
-	"feOffset",
-	"fePointLight",
-	"feSpecularLighting",
-	"feSpotLight",
-	"feTile",
-	"feTurbulence",
-	"filter",
-	"font",
-	"font-face",
-	"font-face-format",
-	"font-face-name",
-	"font-face-src",
-	"font-face-uri",
-	"foreignObject",
-	"g",
-	"glyph",
-	"glyphRef",
-	"hkern",
-	"image",
-	"line",
-	"linearGradient",
-	"marker",
-	"mask",
-	"metadata",
-	"missing-glyph",
-	"mpath",
-	"path",
-	"pattern",
-	"polygon",
-	"polyline",
-	"radialGradient",
-	"rect",
-	"script",
-	"set",
-	"stop",
-	"style",
-	"svg",
-	"switch",
-	"symbol",
-	"text",
-	"textPath",
-	"title",
-	"tref",
-	"tspan",
-	"use",
-	"view",
-	"vkern"
-];
-},{}],"6Huy":[function(require,module,exports) {
-module.exports = require( './svg-tags.json' );
-},{"./svg-tags.json":"N8DI"}],"St5X":[function(require,module,exports) {
+})({"St5X":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createElement = createElement;
 exports.addChild = addChild;
-exports.mount = mount;
+exports.createElement = createElement;
 exports.findElementByChildPositions = findElementByChildPositions;
 exports.focusActiveElement = focusActiveElement;
-exports.setActiveElement = setActiveElement;
 exports.getActiveElementInfo = getActiveElementInfo;
+exports.mount = mount;
+exports.setActiveElement = setActiveElement;
 
-var htmlTags = _interopRequireWildcard(require("html-tags"));
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 
-var svgTags = _interopRequireWildcard(require("svg-tags"));
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
+var SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 /**
  * Decamelizes a string with/without a custom separator (hyphen by default).
  * from: https://ourcodeworld.com/articles/read/608/how-to-camelize-and-decamelize-strings-in-javascript
@@ -239,6 +141,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
  * @param str String in camelcase
  * @param separator Separator for the new decamelized string.
  */
+
 function decamelize(str) {
   var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '-';
   return str.replace(/([a-z\d])([A-Z])/g, '$1' + separator + '$2').replace(/([A-Z]+)([A-Z][a-z\d]+)/g, '$1' + separator + '$2').toLowerCase();
@@ -251,8 +154,16 @@ function createElement(tag, attrs) {
 
   if (typeof tag === 'function') {
     var fn = tag;
-    var props = attrs;
-    props.children = children;
+    var props = attrs; // Handle case where props is null but children are provided
+
+    if (props === null || props === undefined) {
+      props = {
+        children: children
+      };
+    } else {
+      props.children = children;
+    }
+
     return fn(props);
   } else {
     var ns = tagNamespace(tag);
@@ -308,11 +219,45 @@ function setAttribute(el, ns, name, value) {
 function flatten(o) {
   var arr = [];
 
-  for (var prop in o) {
-    arr.push("".concat(decamelize(prop, '-'), ":").concat(o[prop]));
-  }
+  for (var prop in o) arr.push("".concat(decamelize(prop, '-'), ":").concat(o[prop]));
 
   return arr.join(';');
+}
+
+function isInsideForeignObject(element) {
+  var current = element;
+
+  while (current) {
+    if (current.tagName.toLowerCase() === 'foreignobject') {
+      return true;
+    }
+
+    current = current.parentElement;
+  }
+
+  return false;
+}
+
+function recreateWithSvgNamespace(element) {
+  var svgElement = document.createElementNS(SVG_NAMESPACE, element.tagName.toLowerCase()); // Copy attributes
+
+  for (var i = 0; i < element.attributes.length; i++) {
+    var attr = element.attributes[i];
+    svgElement.setAttributeNS(null, attr.name, attr.value);
+  } // Copy children recursively
+
+
+  for (var _i2 = 0; _i2 < element.childNodes.length; _i2++) {
+    var child = element.childNodes[_i2];
+
+    if (child.nodeType === Node.ELEMENT_NODE) {
+      svgElement.appendChild(recreateWithSvgNamespace(child));
+    } else {
+      svgElement.appendChild(child.cloneNode(true));
+    }
+  }
+
+  return svgElement;
 }
 
 function addChild(parentElement, child) {
@@ -321,7 +266,15 @@ function addChild(parentElement, child) {
   } else if (Array.isArray(child)) {
     appendChildren(parentElement, child);
   } else if (isElement(child)) {
-    parentElement.appendChild(child);
+    var childEl = child; // If parent is SVG and child was created with wrong namespace, recreate it
+    // Exception: don't recreate elements inside foreignObject as they should remain HTML
+
+    if (parentElement.namespaceURI === SVG_NAMESPACE && childEl.namespaceURI !== SVG_NAMESPACE && childEl.tagName.toLowerCase() !== 'foreignobject' && !isInsideForeignObject(parentElement)) {
+      var recreated = recreateWithSvgNamespace(childEl);
+      parentElement.appendChild(recreated);
+    } else {
+      parentElement.appendChild(childEl);
+    }
   } else {
     parentElement.appendChild(document.createTextNode(child.toString()));
   }
@@ -408,23 +361,24 @@ function getActiveElementInfo(container) {
 function getChildPosition(element) {
   var childPosition = 0;
 
-  while (element = element.previousElementSibling) {
-    childPosition++;
-  }
+  while (element = element.previousElementSibling) childPosition++;
 
   return childPosition;
 }
 
 function tagNamespace(tag) {
-  //issue: this won't disambiguate certain tags which exist in both svg and html: <a>, <title> ...
-  if (tag === 'svg' || svgTags.default.indexOf(tag) >= 0 && !(htmlTags.default.indexOf(tag) >= 0)) {
-    return "http://www.w3.org/2000/svg";
+  // Only handle the root 'svg' element - all other elements will be handled
+  // dynamically by the addChild function when they're added to SVG parents
+  if (tag === 'svg') {
+    return SVG_NAMESPACE;
   }
 }
-},{"html-tags":"VNeM","svg-tags":"6Huy"}],"VMCN":[function(require,module,exports) {
+},{}],"VMCN":[function(require,module,exports) {
 "use strict";
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.SubComponent = void 0;
 
 var index_1 = require("../dist/es6/index");
@@ -434,13 +388,13 @@ var SubComponent = function SubComponent(props) {
     return props.textAreaChange(e.currentTarget);
   };
 
-  return index_1.createElement("div", {
+  return (0, index_1.createElement)("div", {
     style: {
       border: "1px solid black",
       margin: "0.5em 0",
       padding: "0.5em"
     }
-  }, index_1.createElement("div", null, "Text is: ", props.someText), index_1.createElement("div", null, "Children:", index_1.createElement("div", null, props.children)), index_1.createElement("textarea", {
+  }, (0, index_1.createElement)("div", null, "Text is: ", props.someText), (0, index_1.createElement)("div", null, "Children:", (0, index_1.createElement)("div", null, props.children)), (0, index_1.createElement)("textarea", {
     onKeyPress: textChangeHandler,
     onKeyUp: textChangeHandler,
     onKeyDown: textChangeHandler,
@@ -449,31 +403,229 @@ var SubComponent = function SubComponent(props) {
 };
 
 exports.SubComponent = SubComponent;
+},{"../dist/es6/index":"St5X"}],"G5/u":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SvgNamespaceTest = void 0;
+
+var index_1 = require("../dist/es6/index"); // Test for SVG namespace fix with overlapping tags
+
+
+var SvgNamespaceTest = function SvgNamespaceTest() {
+  return (0, index_1.createElement)("div", null, (0, index_1.createElement)("h2", null, "SVG Namespace Test"), (0, index_1.createElement)("p", null, "Testing overlapping HTML/SVG tags inside SVG elements:"), (0, index_1.createElement)("svg", {
+    width: "300",
+    height: "200",
+    style: {
+      border: '1px solid black'
+    }
+  }, (0, index_1.createElement)("rect", {
+    x: "10",
+    y: "10",
+    width: "80",
+    height: "80",
+    fill: "red"
+  }), (0, index_1.createElement)("circle", {
+    cx: "150",
+    cy: "50",
+    r: "30",
+    fill: "blue"
+  }), (0, index_1.createElement)("line", {
+    x1: "10",
+    y1: "100",
+    x2: "100",
+    y2: "100",
+    stroke: "green",
+    strokeWidth: "2"
+  }), (0, index_1.createElement)("a", {
+    href: "#test"
+  }, (0, index_1.createElement)("title", null, "SVG Title Element"), (0, index_1.createElement)("text", {
+    x: "10",
+    y: "130",
+    fill: "purple"
+  }, "Clickable SVG Text")), (0, index_1.createElement)("style", null, ".svg-style { fill: orange; }"), (0, index_1.createElement)("a", {
+    href: "#link1"
+  }, (0, index_1.createElement)("text", {
+    x: "10",
+    y: "170",
+    fill: "red"
+  }, "SVG Link 1")), (0, index_1.createElement)("a", {
+    href: "#link2"
+  }, (0, index_1.createElement)("text", {
+    x: "150",
+    y: "170",
+    fill: "blue"
+  }, "SVG Link 2"))), (0, index_1.createElement)("p", null, (0, index_1.createElement)("strong", null, "All elements above should use SVG namespace (http://www.w3.org/2000/svg)")), (0, index_1.createElement)("h3", null, "HTML Elements (for comparison)"), (0, index_1.createElement)("p", null, "Compare with HTML elements which use HTML namespace:"), (0, index_1.createElement)("a", {
+    href: "#html-link1"
+  }, "HTML Link 1"), (0, index_1.createElement)("a", {
+    href: "#html-link2"
+  }, "HTML Link 2"), (0, index_1.createElement)("a", {
+    href: "#html-link3"
+  }, "HTML Link 3"), (0, index_1.createElement)("p", null, "Before the fix: overlapping tags like <a>, <title>, <style> would use HTML namespace"), (0, index_1.createElement)("p", null, "After the fix: all elements inside <svg> automatically use SVG namespace"));
+};
+
+exports.SvgNamespaceTest = SvgNamespaceTest;
+},{"../dist/es6/index":"St5X"}],"/RRg":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.StatefulSvgTest = void 0;
+
+var index_1 = require("../dist/es6/index"); // Test for SVG namespace fix with stateful functionality
+
+
+var StatefulSvgTest = function StatefulSvgTest(props) {
+  // Create circles based on count, arranged in a grid
+  var circles = [];
+
+  for (var i = 0; i < props.count; i++) {
+    var x = 30 + i % 8 * 40; // 8 circles per row
+
+    var y = 30 + Math.floor(i / 8) * 40; // New row every 8 circles
+
+    var hue = i * 30 % 360; // Different color for each circle
+
+    circles.push((0, index_1.createElement)("circle", {
+      key: i,
+      cx: x,
+      cy: y,
+      r: "15",
+      fill: "hsl(".concat(hue, ", 70%, 60%)"),
+      stroke: "black",
+      strokeWidth: "1"
+    }));
+  }
+
+  return (0, index_1.createElement)("div", null, (0, index_1.createElement)("h2", null, "Stateful SVG Test"), (0, index_1.createElement)("p", null, "Click the links below to add more circles (count: ", props.count, "):"), (0, index_1.createElement)("svg", {
+    width: "350",
+    height: "200",
+    style: {
+      border: '1px solid black'
+    }
+  }, (0, index_1.createElement)("defs", null, (0, index_1.createElement)("pattern", {
+    id: "grid",
+    width: "40",
+    height: "40",
+    patternUnits: "userSpaceOnUse"
+  }, (0, index_1.createElement)("path", {
+    d: "M 40 0 L 0 0 0 40",
+    fill: "none",
+    stroke: "#ddd",
+    strokeWidth: "1"
+  }))), (0, index_1.createElement)("rect", {
+    width: "100%",
+    height: "100%",
+    fill: "url(#grid)"
+  }), circles, (0, index_1.createElement)("a", {
+    href: "#",
+    onClick: function onClick(e) {
+      e.preventDefault();
+      props.buttonClick();
+    }
+  }, (0, index_1.createElement)("rect", {
+    x: "10",
+    y: "160",
+    width: "60",
+    height: "25",
+    fill: "lightblue",
+    stroke: "blue",
+    strokeWidth: "1",
+    rx: "5"
+  }), (0, index_1.createElement)("text", {
+    x: "40",
+    y: "175",
+    textAnchor: "middle",
+    fill: "blue",
+    fontSize: "12"
+  }, "Add One")), (0, index_1.createElement)("a", {
+    href: "#",
+    onClick: function onClick(e) {
+      e.preventDefault();
+      props.buttonClick();
+    }
+  }, (0, index_1.createElement)("rect", {
+    x: "80",
+    y: "160",
+    width: "60",
+    height: "25",
+    fill: "lightgreen",
+    stroke: "green",
+    strokeWidth: "1",
+    rx: "5"
+  }), (0, index_1.createElement)("text", {
+    x: "110",
+    y: "175",
+    textAnchor: "middle",
+    fill: "green",
+    fontSize: "12"
+  }, "Add More")), (0, index_1.createElement)("text", {
+    x: "175",
+    y: "175",
+    fill: "black",
+    fontSize: "12"
+  }, "Count: ", props.count)), (0, index_1.createElement)("p", null, (0, index_1.createElement)("strong", null, "Demonstrates:")), (0, index_1.createElement)("ul", null, (0, index_1.createElement)("li", null, "SVG namespace working with stateful components"), (0, index_1.createElement)("li", null, "Interactive SVG links calling React-style event handlers"), (0, index_1.createElement)("li", null, "Dynamic rendering based on state (circles increase with count)"), (0, index_1.createElement)("li", null, "All SVG elements properly namespaced despite overlapping HTML tag names (<a>, <text>, etc.)")));
+};
+
+exports.StatefulSvgTest = StatefulSvgTest;
+},{"../dist/es6/index":"St5X"}],"t1xc":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.RuntimeErrorTest = exports.NullPropsTest = void 0;
+
+var index_1 = require("../dist/es6/index"); // Test component to test null props handling
+
+
+var NullPropsTest = function NullPropsTest(props) {
+  return (0, index_1.createElement)("div", null, (0, index_1.createElement)("h3", null, "Null Props Test"), (0, index_1.createElement)("p", null, "Props received: ", JSON.stringify(props)), (0, index_1.createElement)("p", null, "Children: ", Array.isArray(props.children) ? props.children.join(', ') : 'none'));
+};
+
+exports.NullPropsTest = NullPropsTest; // Test for the runtime error fix
+
+var RuntimeErrorTest = function RuntimeErrorTest() {
+  return (0, index_1.createElement)("div", null, (0, index_1.createElement)("h2", null, "Runtime Error Fix Test"), (0, index_1.createElement)("p", null, "Testing component with null props but children provided:"), index_1.createElement(exports.NullPropsTest, null, 'Child 1', 'Child 2', 'Child 3'), (0, index_1.createElement)("p", null, "If you can see the content above, the null props issue is fixed!"));
+};
+
+exports.RuntimeErrorTest = RuntimeErrorTest;
 },{"../dist/es6/index":"St5X"}],"C3c2":[function(require,module,exports) {
 "use strict";
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.Layout = void 0;
 
 var es6_1 = require("../dist/es6");
 
 var subcomponent_1 = require("./subcomponent");
 
+var svg_namespace_test_1 = require("./svg-namespace-test");
+
+var stateful_svg_test_1 = require("./stateful-svg-test");
+
+var runtime_error_test_1 = require("./runtime-error-test");
+
 var Layout = function Layout(props) {
-  return es6_1.createElement("div", null, es6_1.createElement("h1", {
+  return (0, es6_1.createElement)("div", null, (0, es6_1.createElement)("h1", {
     className: "foo"
-  }, props.title), props.input, es6_1.createElement("div", null, "count is: ", props.count), es6_1.createElement("button", {
+  }, props.title), props.input, (0, es6_1.createElement)("div", null, "count is: ", props.count), (0, es6_1.createElement)("button", {
     onClick: function onClick() {
       return props.buttonClick();
     }
-  }, "add"), es6_1.createElement("button", {
+  }, "add"), (0, es6_1.createElement)("button", {
     onClick: function onClick() {
       return props.buttonClick();
     },
     style: {
       marginLeft: "1em"
     }
-  }, "I also add"), es6_1.createElement("button", {
+  }, "I also add"), (0, es6_1.createElement)("button", {
     onClick: function onClick() {
       return props.buttonClick();
     },
@@ -481,7 +633,7 @@ var Layout = function Layout(props) {
     style: {
       marginLeft: "1em"
     }
-  }, "this is disabled.."), es6_1.createElement("button", {
+  }, "this is disabled.."), (0, es6_1.createElement)("button", {
     onClick: function onClick() {
       return props.buttonClick();
     },
@@ -490,16 +642,16 @@ var Layout = function Layout(props) {
       marginLeft: "1em"
     }
   }, "disabled = false"), props.subComponentText.map(function (t, i) {
-    return es6_1.createElement(subcomponent_1.SubComponent, {
+    return (0, es6_1.createElement)(subcomponent_1.SubComponent, {
       someText: t,
       textAreaChange: function textAreaChange(v) {
         return props.textAreaChange(i, v);
       }
     }, "component ", i, " content");
-  }), "namespaced element (svg):", es6_1.createElement("div", null, es6_1.createElement("svg", {
+  }), "namespaced element (svg):", (0, es6_1.createElement)("div", null, (0, es6_1.createElement)("svg", {
     width: "100",
     height: "100"
-  }, es6_1.createElement("rect", {
+  }, (0, es6_1.createElement)("rect", {
     width: "100%",
     height: "100%",
     style: {
@@ -507,7 +659,7 @@ var Layout = function Layout(props) {
       strokeWidth: 1,
       stroke: 'red'
     }
-  }), es6_1.createElement("line", {
+  }), (0, es6_1.createElement)("line", {
     x1: "0",
     y1: "0",
     x2: "100%",
@@ -516,7 +668,7 @@ var Layout = function Layout(props) {
       strokeWidth: 1,
       stroke: 'red'
     }
-  }), es6_1.createElement("line", {
+  }), (0, es6_1.createElement)("line", {
     x1: "0",
     y1: "100%",
     x2: "100%",
@@ -525,14 +677,19 @@ var Layout = function Layout(props) {
       strokeWidth: 1,
       stroke: 'red'
     }
-  }))));
+  }))), (0, es6_1.createElement)(svg_namespace_test_1.SvgNamespaceTest, null), (0, es6_1.createElement)(stateful_svg_test_1.StatefulSvgTest, {
+    count: props.count,
+    buttonClick: props.buttonClick
+  }), (0, es6_1.createElement)(runtime_error_test_1.RuntimeErrorTest, null));
 };
 
 exports.Layout = Layout;
-},{"../dist/es6":"St5X","./subcomponent":"VMCN"}],"Focm":[function(require,module,exports) {
+},{"../dist/es6":"St5X","./subcomponent":"VMCN","./svg-namespace-test":"G5/u","./stateful-svg-test":"/RRg","./runtime-error-test":"t1xc"}],"Focm":[function(require,module,exports) {
 "use strict";
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var index_1 = require("../dist/es6/index");
 
@@ -548,7 +705,7 @@ var buttonClick = function buttonClick() {
 //which means it has its own state, and the user can use ctrl-z etc.
 
 
-var input = index_1.createElement("input", {
+var input = (0, index_1.createElement)("input", {
   ref: function ref(input) {
     input.onkeypress = input.onkeydown = input.onkeyup = input.onchange = function () {
       //do not invoke mount() directly within this handler,
@@ -579,16 +736,16 @@ var subComponentText = ['a component', 'another component'];
 
 function updateRetainFocus() {
   //get the focused element's position and selectionrange
-  var a = index_1.getActiveElementInfo();
+  var a = (0, index_1.getActiveElementInfo)();
   update(); //re-set the focus and selectionrange after the update
 
-  index_1.setActiveElement(a);
+  (0, index_1.setActiveElement)(a);
 }
 
 function update() {
-  index_1.mount( //note: the layout will detach and append our input above, so it loses its focus and selectionrange.
+  (0, index_1.mount)( //note: the layout will detach and append our input above, so it loses its focus and selectionrange.
   //make sure to call getActiveElementInfo prior to calling App
-  layout_1.Layout({
+  (0, layout_1.Layout)({
     title: title,
     count: count,
     buttonClick: buttonClick,

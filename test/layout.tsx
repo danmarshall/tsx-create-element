@@ -1,6 +1,7 @@
 import { createElement } from '../dist/es6';
 import { SubComponent } from './subcomponent';
 import { SvgNamespaceTest } from './svg-namespace-test';
+import { StatefulSvgTest } from './stateful-svg-test';
 import { RuntimeErrorTest } from './runtime-error-test';
 
 export interface Props {
@@ -36,6 +37,7 @@ export const Layout = (props: Props) => {
                 </svg>
             </div>
             <SvgNamespaceTest />
+            <StatefulSvgTest count={props.count} buttonClick={props.buttonClick} />
             <RuntimeErrorTest />
         </div>
     );
