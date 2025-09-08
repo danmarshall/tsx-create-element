@@ -122,7 +122,7 @@ function isInsideForeignObject(element: Element): boolean {
 }
 
 function recreateWithSvgNamespace(element: Element): Element {
-    const svgElement = document.createElementNS(SVG_NAMESPACE, element.tagName);
+    const svgElement = document.createElementNS(SVG_NAMESPACE, element.tagName.toLowerCase());
     
     // Copy attributes
     for (let i = 0; i < element.attributes.length; i++) {

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SVG Debug Test</title>
+</head>
+<body>
+    <div id="container"></div>
+    
+    <script type="module">
+        // Import the createElement function
+        import { createElement, mount } from '../dist/es6/index.js';
+        
+        console.log('Creating SVG test...');
+        
+        // Test simple SVG creation - this should work
+        const simpleSvg = createElement('svg', { width: 200, height: 100, style: { border: '1px solid red' } },
+            createElement('rect', { x: 10, y: 10, width: 50, height: 50, fill: 'blue' })
+        );
+        
+        console.log('Simple SVG element:', simpleSvg);
+        console.log('Simple SVG namespace:', simpleSvg.namespaceURI);
+        console.log('Simple SVG children count:', simpleSvg.children.length);
+        
+        if (simpleSvg.children.length > 0) {
+            console.log('First child:', simpleSvg.children[0]);
+            console.log('First child namespace:', simpleSvg.children[0].namespaceURI);
+            console.log('First child tagName:', simpleSvg.children[0].tagName);
+        }
+        
+        // Mount it
+        mount(simpleSvg, document.getElementById('container'));
+        
+        // Test the createElement process step by step
+        console.log('\n=== Step by step test ===');
+        
+        // 1. Create SVG element
+        const svg = createElement('svg', { width: 200, height: 100, style: { border: '1px solid green', marginTop: '10px' } });
+        console.log('1. SVG created:', svg.namespaceURI);
+        
+        // 2. Create rect element (should be HTML initially)
+        const rect = createElement('rect', { x: 10, y: 10, width: 50, height: 50, fill: 'red' });
+        console.log('2. Rect created:', rect.namespaceURI);
+        
+        // 3. Add rect to SVG (this should trigger recreation)
+        console.log('3. Adding rect to SVG...');
+        svg.appendChild(rect);
+        console.log('3a. Rect after appendChild:', svg.children[0]);
+        console.log('3b. Rect namespace after appendChild:', svg.children[0].namespaceURI);
+        
+        // Mount the step-by-step version
+        const container2 = document.createElement('div');
+        document.body.appendChild(container2);
+        mount(svg, container2);
+    </script>
+</body>
+</html>
