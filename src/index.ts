@@ -1,8 +1,4 @@
-import * as htmlTags from 'html-tags';
-import * as svgTags from 'svg-tags';
-
-const htmlTagArray: string[] = htmlTags.default || htmlTags;
-const svgTagArray: string[] = svgTags.default || svgTags;
+const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 
 /**
  * Decamelizes a string with/without a custom separator (hyphen by default).
@@ -45,11 +41,18 @@ export function createElement(tag: string, attrs: AttributeMap, ...children: (El
 export function createElement(tag: any, attrs: any, ...children: any[]) {
     if (typeof tag === 'function') {
         const fn = tag as StatelessComponent<{}>;
-        const props = attrs as StatelessProps<{}>;
-        props.children = children;
+        let props = attrs as StatelessProps<{}>;
+        
+        // Handle case where props is null but children are provided
+        if (props === null || props === undefined) {
+            props = { children } as StatelessProps<{}>;
+        } else {
+            props.children = children;
+        }
+        
         return fn(props);
     } else {
-        const ns = tagNamespace(tag);
+        const ns = (tag === 'svg') ? SVG_NAMESPACE : null;
         const el: Element = ns ? document.createElementNS(ns, tag) : document.createElement(tag as string);
         const map = attrs as AttributeMap;
         let ref: (el: HTMLElement) => void;
@@ -101,13 +104,68 @@ function flatten(o: object) {
     return arr.join(';');
 }
 
+function isInsideForeignObject(element: Element): boolean {
+    let current = element;
+    while (current) {
+        if (current.tagName.toLowerCase() === 'foreignobject') {
+            return true;
+        }
+        current = current.parentElement;
+    }
+    return false;
+}
+
+function recreateWithSvgNamespace(element: Element): Element {
+    const svgElement = document.createElementNS(SVG_NAMESPACE, element.tagName.toLowerCase());
+    
+    // Copy attributes
+    for (let i = 0; i < element.attributes.length; i++) {
+        const attr = element.attributes[i];
+        svgElement.setAttributeNS(null, attr.name, attr.value);
+    }
+    
+    // Copy event handlers and other properties
+    // Common event handlers that need to be copied
+    const eventProperties = ['onclick', 'onmousedown', 'onmouseup', 'onmouseover', 'onmouseout', 
+                           'onmousemove', 'onkeydown', 'onkeyup', 'onkeypress', 'onfocus', 'onblur'];
+    
+    for (const prop of eventProperties) {
+        if (element[prop]) {
+            svgElement[prop] = element[prop];
+        }
+    }
+    
+    // Copy children recursively
+    for (let i = 0; i < element.childNodes.length; i++) {
+        const child = element.childNodes[i];
+        if (child.nodeType === Node.ELEMENT_NODE) {
+            svgElement.appendChild(recreateWithSvgNamespace(child as Element));
+        } else {
+            svgElement.appendChild(child.cloneNode(true));
+        }
+    }
+    
+    return svgElement;
+}
+
 export function addChild(parentElement: Element, child: Element | Content | JSX.Element | (Element | Content)[]) {
     if (child === null || child === undefined || typeof child === "boolean") {
         return;
     } else if (Array.isArray(child)) {
         appendChildren(parentElement, child);
     } else if (isElement(child)) {
-        parentElement.appendChild(child as Element);
+        const childEl = child as Element;
+        // If parent is SVG and child was created with wrong namespace, recreate it
+        // Exception: don't recreate elements inside foreignObject as they should remain HTML
+        if (parentElement.namespaceURI === SVG_NAMESPACE && 
+            childEl.namespaceURI !== SVG_NAMESPACE &&
+            childEl.tagName.toLowerCase() !== 'foreignobject' &&
+            !isInsideForeignObject(parentElement)) {
+            const recreated = recreateWithSvgNamespace(childEl);
+            parentElement.appendChild(recreated);
+        } else {
+            parentElement.appendChild(childEl);
+        }
     } else {
         parentElement.appendChild(document.createTextNode(child.toString()));
     }
@@ -180,11 +238,4 @@ function getChildPosition(element: Element): number {
     let childPosition = 0;
     while (element = element.previousElementSibling) childPosition++;
     return childPosition;
-}
-
-function tagNamespace(tag: string) {
-    //issue: this won't disambiguate certain tags which exist in both svg and html: <a>, <title> ...
-    if (tag === 'svg' || (svgTagArray.indexOf(tag) >= 0 && !(htmlTagArray.indexOf(tag) >= 0))) {
-        return "http://www.w3.org/2000/svg";
-    }
 }

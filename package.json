@@ -36,10 +36,7 @@
   "peerDependencies": {
     "@types/react": "*"
   },
-  "dependencies": {
-    "html-tags": "^2.0.0",
-    "svg-tags": "^1.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/react": "^16.4.2",
     "typescript": "^4.3.4"

@@ -2,9 +2,11 @@
     "compilerOptions": {
         "declaration": true,
         "jsx": "react",
+        "jsxFactory": "createElement",
         "moduleResolution": "node",
         "outDir": "dist/es6",
-        "target": "es6"
+        "target": "es6",
+        "lib": ["es6", "DOM"]
     },
     "include": [
         "src"
