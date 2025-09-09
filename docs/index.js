@@ -166,7 +166,7 @@ function createElement(tag, attrs) {
 
     return fn(props);
   } else {
-    var ns = tagNamespace(tag);
+    var ns = tag === 'svg' ? SVG_NAMESPACE : null;
     var el = ns ? document.createElementNS(ns, tag) : document.createElement(tag);
     var map = attrs;
     var ref;
@@ -376,14 +376,6 @@ function getChildPosition(element) {
   while (element = element.previousElementSibling) childPosition++;
 
   return childPosition;
-}
-
-function tagNamespace(tag) {
-  // Only handle the root 'svg' element - all other elements will be handled
-  // dynamically by the addChild function when they're added to SVG parents
-  if (tag === 'svg') {
-    return SVG_NAMESPACE;
-  }
 }
 },{}],"VMCN":[function(require,module,exports) {
 "use strict";
