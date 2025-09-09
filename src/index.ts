@@ -52,7 +52,7 @@ export function createElement(tag: any, attrs: any, ...children: any[]) {
         
         return fn(props);
     } else {
-        const ns = tagNamespace(tag);
+        const ns = (tag === 'svg') ? SVG_NAMESPACE : null;
         const el: Element = ns ? document.createElementNS(ns, tag) : document.createElement(tag as string);
         const map = attrs as AttributeMap;
         let ref: (el: HTMLElement) => void;
@@ -238,12 +238,4 @@ function getChildPosition(element: Element): number {
     let childPosition = 0;
     while (element = element.previousElementSibling) childPosition++;
     return childPosition;
-}
-
-function tagNamespace(tag: string) {
-    // Only handle the root 'svg' element - all other elements will be handled
-    // dynamically by the addChild function when they're added to SVG parents
-    if (tag === 'svg') {
-        return SVG_NAMESPACE;
-    }
 }
