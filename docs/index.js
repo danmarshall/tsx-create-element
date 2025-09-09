@@ -577,26 +577,6 @@ var StatefulSvgTest = function StatefulSvgTest(props) {
 };
 
 exports.StatefulSvgTest = StatefulSvgTest;
-},{"../dist/es6/index":"St5X"}],"t1xc":[function(require,module,exports) {
-"use strict";
-
-exports.__esModule = true;
-exports.RuntimeErrorTest = exports.NullPropsTest = void 0;
-
-var index_1 = require("../dist/es6/index"); // Test component to test null props handling
-
-
-var NullPropsTest = function NullPropsTest(props) {
-  return index_1.createElement("div", null, index_1.createElement("h3", null, "Null Props Test"), index_1.createElement("p", null, "Props received: ", JSON.stringify(props)), index_1.createElement("p", null, "Children: ", Array.isArray(props.children) ? props.children.join(', ') : 'none'));
-};
-
-exports.NullPropsTest = NullPropsTest; // Test for the runtime error fix
-
-var RuntimeErrorTest = function RuntimeErrorTest() {
-  return index_1.createElement("div", null, index_1.createElement("h2", null, "Runtime Error Fix Test"), index_1.createElement("p", null, "Testing component with null props but children provided:"), index_1.createElement(exports.NullPropsTest, null, 'Child 1', 'Child 2', 'Child 3'), index_1.createElement("p", null, "If you can see the content above, the null props issue is fixed!"));
-};
-
-exports.RuntimeErrorTest = RuntimeErrorTest;
 },{"../dist/es6/index":"St5X"}],"C3c2":[function(require,module,exports) {
 "use strict";
 
@@ -610,8 +590,6 @@ var subcomponent_1 = require("./subcomponent");
 var svg_namespace_test_1 = require("./svg-namespace-test");
 
 var stateful_svg_test_1 = require("./stateful-svg-test");
-
-var runtime_error_test_1 = require("./runtime-error-test");
 
 var Layout = function Layout(props) {
   return es6_1.createElement("div", null, es6_1.createElement("h1", {
@@ -682,11 +660,11 @@ var Layout = function Layout(props) {
   }))), es6_1.createElement(svg_namespace_test_1.SvgNamespaceTest, null), es6_1.createElement(stateful_svg_test_1.StatefulSvgTest, {
     count: props.count,
     buttonClick: props.buttonClick
-  }), es6_1.createElement(runtime_error_test_1.RuntimeErrorTest, null));
+  }));
 };
 
 exports.Layout = Layout;
-},{"../dist/es6":"St5X","./subcomponent":"VMCN","./svg-namespace-test":"G5/u","./stateful-svg-test":"/RRg","./runtime-error-test":"t1xc"}],"Focm":[function(require,module,exports) {
+},{"../dist/es6":"St5X","./subcomponent":"VMCN","./svg-namespace-test":"G5/u","./stateful-svg-test":"/RRg"}],"Focm":[function(require,module,exports) {
 "use strict";
 
 exports.__esModule = true;
